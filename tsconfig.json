@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,          // Não permite expressões e declarações com tipo 'any' implícito
+    "strictNullChecks": true,       // Ativa verificações estritas de nulidade
+    "strictFunctionTypes": true,    // Ativa verificações de tipo mais rigorosas para funções
+    "strictPropertyInitialization": true, // Verifica se as propriedades de classes são inicializadas corretamente
+    "noImplicitReturns": true,      // Não permite funções que não retornam um valor em todos os caminhos de código
+    "noImplicitThis": true,         // Aumenta a verificação de tipos para 'this'
+    "alwaysStrict": true,            // Aplica o modo JavaScript estrito para todos os arquivos,
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["src/*"]
+		}
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
