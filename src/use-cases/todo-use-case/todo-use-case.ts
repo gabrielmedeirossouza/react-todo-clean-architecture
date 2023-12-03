@@ -1,13 +1,13 @@
 import { Result } from "@/shared/result";
 import { Todo } from "@/entities/todo";
-import { ICreateTodoUseCase } from "../interfaces/create-todo-use-case";
+import { ITodoUseCase } from "../interfaces/todo-use-case";
 import { TodoTitleTooShortError } from "../errors/todo-title-too-short-error";
 import { TodoTitleTooLongError } from "../errors/todo-title-too-long-error";
 import { TodoDescriptionTooShortError } from "../errors/todo-description-too-short-error";
 import { TodoDescriptionTooLongError } from "../errors/todo-description-too-long-error";
 import { ITodoRepository } from "../interfaces/todo-repository";
 
-export class CreateTodoUseCase implements ICreateTodoUseCase {
+export class TodoUseCase implements ITodoUseCase {
 	private readonly _TITLE_MIN_LENGTH = 3;
 	private readonly _TITLE_MAX_LENGTH = 20;
 	private readonly _DESCRIPTION_MIN_LENGTH = 10;
@@ -17,7 +17,7 @@ export class CreateTodoUseCase implements ICreateTodoUseCase {
 		private _todoRepository: ITodoRepository
 	) {}
 
-	public async execute(title: string, description: string) {
+	public async create(title: string, description: string) {
 		if (!this._validateTitleTooShort(title)) return Result.fail(new TodoTitleTooShortError(title, this._TITLE_MIN_LENGTH));
 		if (!this._validateTitleTooLong(title)) return Result.fail(new TodoTitleTooLongError(title, this._TITLE_MAX_LENGTH));
 		if (!this._validateDescriptionTooShort(description)) return Result.fail(new TodoDescriptionTooShortError(description, this._DESCRIPTION_MIN_LENGTH));
@@ -27,7 +27,7 @@ export class CreateTodoUseCase implements ICreateTodoUseCase {
 		const createdTodo = await this._todoRepository.create(todo);
 		if (!createdTodo.ok) return createdTodo;
 
-		return Result.ok(todo);
+		return Result.ok({ id: createdTodo.value, entity: todo });
 	}
 
 	private _validateTitleTooShort(title: string): boolean {

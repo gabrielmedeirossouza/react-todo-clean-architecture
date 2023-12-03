@@ -1,7 +1,7 @@
 import { ITodo } from "@/entities/interfaces/todo";
 import { Result } from "@/shared/result";
 import { ITodoRepository } from "@/use-cases/interfaces/todo-repository";
-import { IHttp } from "../interfaces/http";
+import { IHttp } from "../../use-cases/interfaces/http";
 
 export class TodoRepository implements ITodoRepository {
 	constructor(
@@ -12,6 +12,7 @@ export class TodoRepository implements ITodoRepository {
 		const response = await this._http.post("www.it-is-a-fake-url.com", todo);
 		if (!response.ok) return response;
 
-		return Result.ok(undefined);
+		// This is a fake id, just to simulate a database id
+		return Result.ok(String(Math.random() * 10000 + 1));
 	}
 }

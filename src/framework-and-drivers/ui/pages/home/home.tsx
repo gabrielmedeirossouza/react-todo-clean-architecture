@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { todoControllerFactory } from "../../factories/todo-controller-factory";
+import { todoPresenterFactory } from "../../factories/todo-presenter-factory";
 
 type TTodo = {
 	id: string;
@@ -17,7 +18,9 @@ export const Home = () => {
 		e.preventDefault();
 
 		const todoController = todoControllerFactory();
-		const newTodo = await todoController.createTodo(title, description);
+		const todoModel = await todoController.createTodo(title, description);
+		const presenter = todoPresenterFactory();
+		const newTodo = presenter.present(todoModel);
 
 		if (newTodo.ok) {
 			setTodos([...todos, newTodo.value]);

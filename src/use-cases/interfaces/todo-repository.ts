@@ -3,5 +3,5 @@ import { Result } from "@/shared/result";
 import { GenericServiceError } from "@/shared/errors/generic-service-error";
 
 export interface ITodoRepository {
-	create(todo: ITodo): Promise<Result<void, GenericServiceError>>;
+	create(todo: ITodo): Promise<Result<string, GenericServiceError>>;
 }

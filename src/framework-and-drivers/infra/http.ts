@@ -1,6 +1,6 @@
-import { IHttp } from "@/interface-adapters/interfaces/http";
 import { Result } from "@/shared/result";
 import { GenericServiceError } from "@/shared/errors/generic-service-error";
+import { IHttp } from "@/use-cases/interfaces/http";
 
 export class Http implements IHttp {
 	public async get<T>(url: string) {
