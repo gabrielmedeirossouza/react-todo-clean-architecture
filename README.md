@@ -9,4 +9,5 @@ In the architecture of this project, Shared is not a layer; it's a foundational 
 ## High-level Error Handling with Monads - shared/result
 To handle errors efficiently and expressively, I have implemented a monadic pattern using a Result<T, K> type. This approach allows for high-level error control, making it simpler to manage success and failure states in the application's operations.
 
-building...
+## Diagram
+![Screenshot_134](https://github.com/gabrielmedeirossouza/react-todo-clean-architecture/assets/33793805/7b417281-7be5-4a95-aa17-3232caa4cc65)
