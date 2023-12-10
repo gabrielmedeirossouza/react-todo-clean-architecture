@@ -1,6 +1,6 @@
 import { GenericServiceMessageError, UnknownMessageError } from "@/interface-adapters/errors";
 import { TodoDescriptionFieldValidationError, TodoTitleFieldValidationError } from "@/interface-adapters/errors/todo";
-import { ITodoViewModel } from "@/interface-adapters/interfaces/todo";
+import { ICreateTodoViewModel } from "@/interface-adapters/interfaces/todo";
 import { Result } from "@/shared/result";
 import { GenericServiceError } from "@/use-cases/errors";
 import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "@/use-cases/errors/todo";
@@ -8,7 +8,7 @@ import { ICreateTodoResponseModel, ITodoOutputPort } from "@/use-cases/interface
 
 export class TodoPresenter implements ITodoOutputPort {
 	constructor(
-		private _updateView: (viewModel: ITodoViewModel) => void
+		private _updateView: (viewModel: ICreateTodoViewModel) => void
 	) { }
 
 	public createTodoResponse({ response }: ICreateTodoResponseModel): void {

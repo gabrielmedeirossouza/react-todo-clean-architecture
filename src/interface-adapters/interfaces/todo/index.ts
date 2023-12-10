@@ -1,2 +1,2 @@
 export * from "./todo-controller";
-export * from "./todo-view-model";
+export * from "./create-todo-view-model";

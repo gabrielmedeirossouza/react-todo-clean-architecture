@@ -10,4 +10,10 @@ In the architecture of this project, Shared is not a layer; it's a foundational 
 To handle errors efficiently and expressively, I have implemented a monadic pattern using a Result<T, K> type. This approach allows for high-level error control, making it simpler to manage success and failure states in the application's operations.
 
 ## Diagram
-![Screenshot_134](https://github.com/gabrielmedeirossouza/react-todo-clean-architecture/assets/33793805/7b417281-7be5-4a95-aa17-3232caa4cc65)
+- Blue lines indicates a "implements" or "extends" relationship;
+- White lines indicates a "uses" relationship;
+
+![diagram](./resources/diagram.png)
+
+### Clean Architecture layers
+![clean architecture layers](./resources/clean-architecture-layers.png)
