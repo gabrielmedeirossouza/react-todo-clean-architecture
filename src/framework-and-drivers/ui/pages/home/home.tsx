@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { todoControllerFactory } from "../../factories/todo-controller-factory";
+import { todoFactory } from "../../factories/todo-factory";
 
 type TTodo = {
 	id: string;
@@ -15,7 +15,7 @@ export const Home = () => {
 	const handleAddTodo = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		const todo = todoControllerFactory((({ viewModel }) => {
+		const todo = todoFactory((({ viewModel }) => {
 			if (viewModel.ok)
 				setTodos([...todos, viewModel.value]);
 		}));
