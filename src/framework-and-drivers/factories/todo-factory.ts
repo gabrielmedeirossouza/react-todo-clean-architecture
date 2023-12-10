@@ -1,13 +1,17 @@
-import { Http } from "@/framework-and-drivers/infra/http";
 import { TodoController } from "@/interface-adapters/controllers/todo";
 import { ICreateTodoViewModel } from "@/interface-adapters/interfaces/todo";
+import { IDeleteTodoViewModel } from "@/interface-adapters/interfaces/todo/delete-todo-view-model";
 import { TodoPresenter } from "@/interface-adapters/presenters/todo";
-import { TodoRepository } from "@/interface-adapters/repositories/todo";
+import { InMemoryTodoRepository } from "@/interface-adapters/repositories/todo";
 import { TodoUseCase } from "@/use-cases/todo-use-case";
 
-export const todoFactory = (updateView: (viewModel: ICreateTodoViewModel) => void) => new TodoController(
+// const todoRepository = new TodoRepository(new Http());
+const todoRepository = new InMemoryTodoRepository();
+
+
+export const todoFactory = (createTodoUpdateView: (viewModel: ICreateTodoViewModel) => void, deleteTodoUpdateView: (viewModel: IDeleteTodoViewModel) => void) => new TodoController(
 	new TodoUseCase(
-		new TodoRepository(new Http()),
-		new TodoPresenter(updateView)
+		todoRepository,
+		new TodoPresenter({ createTodoUpdateView, deleteTodoUpdateView })
 	)
 );

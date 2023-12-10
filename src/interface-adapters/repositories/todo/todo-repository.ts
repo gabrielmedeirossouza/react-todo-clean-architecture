@@ -17,4 +17,11 @@ export class TodoRepository implements ITodoRepository {
 		// This is a fake id, just to simulate a database id
 		return Result.ok(String(Math.random() * 10000 + 1));
 	}
+
+	public async delete(id: string): Promise<Result<string, GenericServiceError>> {
+		const response = await this._http.delete(`www.it-is-a-fake-url.com/${id}`);
+		if (!response.ok) return response;
+
+		return Result.ok(id);
+	}
 }

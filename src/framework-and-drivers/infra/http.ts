@@ -31,4 +31,34 @@ export class Http implements IHttp {
 			return Result.fail(new GenericServiceError());
 		}
 	}
+
+	public async put<T>(url: string, body: any): Promise<Result<T, GenericServiceError>> {
+		try {
+			const response = await fetch(url, {
+				method: "PUT",
+				body: JSON.stringify(body),
+				headers: {
+					"Content-type": "application/json; charset=UTF-8"
+				}
+			});
+			const data = await response.json();
+
+			return Result.ok(data as T);
+		} catch (error) {
+			return Result.fail(new GenericServiceError());
+		}
+	}
+
+	public async delete<T>(url: string): Promise<Result<T, GenericServiceError>> {
+		try {
+			const response = await fetch(url, {
+				method: "DELETE"
+			});
+			const data = await response.json();
+
+			return Result.ok(data as T);
+		} catch (error) {
+			return Result.fail(new GenericServiceError());
+		}
+	}
 }

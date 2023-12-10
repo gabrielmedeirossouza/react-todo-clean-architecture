@@ -1,5 +1,5 @@
 import { Result } from "@/shared/result";
-import { ICreateTodoRequestModel, ITodoInputPort, ITodoOutputPort, ITodoRepository } from "../interfaces/todo";
+import { ICreateTodoRequestModel, IDeleteTodoRequestModel, ITodoInputPort, ITodoOutputPort, ITodoRepository } from "../interfaces/todo";
 import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "../errors/todo";
 import { Todo } from "@/entities/todo";
 
@@ -29,6 +29,13 @@ export class TodoUseCase implements ITodoInputPort {
 		if (!createdTodo.ok) return this._todoOutputPort.createTodoResponse({ response: createdTodo });
 
 		this._todoOutputPort.createTodoResponse({response: Result.ok({ id: createdTodo.value, entity: todo })});
+	}
+
+	public async deleteTodoRequest({ id }: IDeleteTodoRequestModel): Promise<void> {
+		const deletedTodo = await this._todoRepository.delete(id);
+		if (!deletedTodo.ok) return this._todoOutputPort.deleteTodoResponse({ response: deletedTodo });
+
+		this._todoOutputPort.deleteTodoResponse({ response: Result.ok(id) });
 	}
 
 	private _validateTitleTooShort(title: string): boolean {

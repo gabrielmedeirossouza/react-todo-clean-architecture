@@ -9,4 +9,8 @@ export class TodoController implements ITodoController {
 	public async createTodo(title: string, description: string): Promise<void> {
 		await this._todoUseCase.createTodoRequest({ title, description });
 	}
+
+	public async deleteTodoById(id: string): Promise<void> {
+		await this._todoUseCase.deleteTodoRequest({ id });
+	}
 }
