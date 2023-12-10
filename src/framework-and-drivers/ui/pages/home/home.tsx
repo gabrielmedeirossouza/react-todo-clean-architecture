@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { todoControllerFactory } from "../../factories/todo-controller-factory";
-import { todoPresenterFactory } from "../../factories/todo-presenter-factory";
 
 type TTodo = {
 	id: string;
@@ -12,25 +11,16 @@ export const Home = () => {
 	const [todos, setTodos] = useState<TTodo[]>([]);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
-	const [error, setError] = useState("");
 
 	const handleAddTodo = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		const todoController = todoControllerFactory();
-		const todoModel = await todoController.createTodo(title, description);
-		const presenter = todoPresenterFactory();
-		const newTodo = presenter.present(todoModel);
+		const todo = todoControllerFactory((({ viewModel }) => {
+			if (viewModel.ok)
+				setTodos([...todos, viewModel.value]);
+		}));
 
-		if (newTodo.ok) {
-			setTodos([...todos, newTodo.value]);
-			setTitle("");
-			setDescription("");
-			setError("");
-			return;
-		}
-
-		setError(newTodo.error);
+		todo.createTodo(title, description);
 	};
 
 	return (
@@ -41,7 +31,15 @@ export const Home = () => {
 				<input type="text" placeholder="descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
 				<button>Adicionar</button>
 			</form>
-			{error && <div style={{color: "tomato"}}>{error}</div>}
+
+			<ul>
+				{todos.map((todo) => (
+					<li key={todo.id}>
+						<h3>{todo.title}</h3>
+						<p>{todo.description}</p>
+					</li>
+				))}
+			</ul>
 		</div>
 	);
 };

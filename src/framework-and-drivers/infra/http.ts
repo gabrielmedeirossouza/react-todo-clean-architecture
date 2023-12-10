@@ -1,9 +1,10 @@
 import { Result } from "@/shared/result";
-import { GenericServiceError } from "@/shared/errors/generic-service-error";
+import { GenericServiceError } from "@/use-cases/errors";
 import { IHttp } from "@/use-cases/interfaces/http";
 
+
 export class Http implements IHttp {
-	public async get<T>(url: string) {
+	public async get<T>(url: string): Promise<Result<T, GenericServiceError>> {
 		try {
 			const response = await fetch(url);
 			const data = await response.json();
@@ -14,7 +15,7 @@ export class Http implements IHttp {
 		}
 	}
 
-	public async post<T>(url: string, body: any) {
+	public async post<T>(url: string, body: any): Promise<Result<T, GenericServiceError>> {
 		try {
 			const response = await fetch(url, {
 				method: "POST",
