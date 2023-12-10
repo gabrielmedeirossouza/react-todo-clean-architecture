@@ -1,5 +1,5 @@
+import { todoFactory } from "@/framework-and-drivers/factories/todo-factory";
 import { useState } from "react";
-import { todoFactory } from "../../factories/todo-factory";
 
 type TTodo = {
 	id: string;
