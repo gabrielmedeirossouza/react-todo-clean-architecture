@@ -1,42 +1,18 @@
-import { todoFactory } from "@/framework-and-drivers/factories/todo-factory";
-import { useMemo, useState } from "react";
-
-type TTodo = {
-	id: string;
-	title: string;
-	description: string;
-};
+import { useTodoStore } from "@/framework-and-drivers/store/use-todo-store";
+import { useState } from "react";
 
 export const Home = () => {
-	const [todos, setTodos] = useState<TTodo[]>([]);
+	const { todoList, createTodo, deleteTodoById } = useTodoStore();
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 
-	const todo = useMemo(() => todoFactory(
-		(({ viewModel }) => {
-			if (viewModel.ok) {
-				setTodos((prev) => [...prev, viewModel.value]);
-				setTitle("");
-				setDescription("");
-			} else {
-				console.log(viewModel.error);
-			}
-		}),
-		(({viewModel}) => {
-			if (viewModel.ok)
-				setTodos((prev) => prev.filter((todo) => todo.id !== viewModel.value));
-			else
-				console.log(viewModel.error);
-		})
-	), []);
-
 	const handleAddTodo = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		todo.createTodo(title, description);
+		createTodo(title, description);
 	};
 
 	const handleDeleteTodo = async (id: string) => {
-		todo.deleteTodoById(id);
+		deleteTodoById(id);
 	};
 
 	return (
@@ -49,7 +25,7 @@ export const Home = () => {
 			</form>
 
 			<ul>
-				{todos.map((todo) => (
+				{todoList.map((todo) => (
 					<li key={todo.id} style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
 						<h3>{todo.title}</h3>
 						<p>{todo.description}</p>

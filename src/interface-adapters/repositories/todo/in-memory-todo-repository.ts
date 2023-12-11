@@ -14,10 +14,13 @@ export class InMemoryTodoRepository implements ITodoRepository {
 			entity: todo
 		});
 
+		console.log(this._todoList);
+
 		return Result.ok(fakeId);
 	}
 
 	public async delete(id: string): Promise<Result<string, GenericServiceError>> {
+		console.log(this._todoList, id);
 		const todoIndex = this._todoList.findIndex(todo => todo.id === id);
 		if (todoIndex === -1) return Result.fail(new GenericServiceError());
 
