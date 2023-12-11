@@ -1,4 +1,3 @@
-import { ITodo } from "@/entities/interfaces/todo";
 import { Result } from "@/shared/result";
 import { GenericServiceError } from "@/use-cases/errors";
 import { IHttp } from "@/use-cases/interfaces/http";
@@ -10,8 +9,12 @@ export class TodoRepository implements ITodoRepository {
 		private _http: IHttp
 	) {}
 
-	public async create(todo: ITodo): Promise<Result<string, GenericServiceError>> {
-		const response = await this._http.post("www.it-is-a-fake-url.com", todo);
+	public async create(title: string, description: string, isCompleted: boolean): Promise<Result<string, GenericServiceError>> {
+		const response = await this._http.post("www.it-is-a-fake-url.com", {
+			title,
+			description,
+			isCompleted
+		});
 		if (!response.ok) return response;
 
 		// This is a fake id, just to simulate a database id

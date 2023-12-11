@@ -25,10 +25,10 @@ export class CreateTodoUseCase implements ICreateTodoInputPort {
 		if (!this._todoValidationService.validateDescriptionTooLong(description))
 			return this._todoOutputPort.createTodoResponse({ response: Result.fail(new TodoDescriptionTooLongError(description, this._DESCRIPTION_MAX_LENGTH)) });
 
-		const todo = new Todo(title, description, false);
-		const createdTodo = await this._todoRepository.create(todo);
+		const createdTodo = await this._todoRepository.create(title, description, false);
 		if (!createdTodo.ok) return this._todoOutputPort.createTodoResponse({ response: createdTodo });
+		const todo = new Todo(createdTodo.value, title, description, false);
 
-		this._todoOutputPort.createTodoResponse({response: Result.ok({ id: createdTodo.value, entity: todo })});
+		this._todoOutputPort.createTodoResponse({ response: Result.ok(todo) });
 	}
 }

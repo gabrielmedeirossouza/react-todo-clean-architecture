@@ -4,16 +4,10 @@ import { CreateTodoPresenter, DeleteTodoPresenter } from "@/interface-adapters/p
 import { InMemoryTodoRepository } from "@/interface-adapters/repositories/todo";
 import { CreateTodoUseCase, DeleteTodoUseCase } from "@/use-cases/todo-use-case";
 import { TodoValidationService } from "@/use-cases/todo-use-case/todo-validation-service";
-
-type TTodo = Readonly<{
-	id: string;
-	title: string;
-	description: string;
-	isCompleted: boolean;
-}>
+import { ITodo } from "@/entities/interfaces/todo";
 
 interface ITodoState {
-	todoList: TTodo[];
+	todoList: ITodo[];
 	createTodo: (title: string, description: string) => void;
 	deleteTodoById: (id: string) => void;
 }
@@ -66,6 +60,6 @@ export const useTodoStore = create<ITodoState>()((set) => {
 	return {
 		todoList: [],
 		createTodo: async (title, description) => await todoController.createTodo(title, description),
-		deleteTodoById: async (id) => await todoController.deleteTodoById(id)
+		deleteTodoById: async (id) => await todoController.deleteTodo(id)
 	};
 });

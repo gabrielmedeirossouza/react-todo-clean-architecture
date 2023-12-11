@@ -13,10 +13,7 @@ export class CreateTodoPresenter implements ICreateTodoOutputPort {
 
 	public createTodoResponse({ response }: ICreateTodoResponseModel): void {
 		if (response.ok) return this._updateView({
-			viewModel: Result.ok({
-				id: response.value.id,
-				...response.value.entity
-			})
+			viewModel: Result.ok(response.value)
 		});
 
 		if (response.error instanceof TodoTitleTooShortError)

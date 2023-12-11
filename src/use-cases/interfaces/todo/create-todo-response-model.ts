@@ -1,10 +1,7 @@
 import { ITodo } from "@/entities/interfaces/todo";
-import { IEntityModel } from "@/shared/entity-model";
 import { Result } from "@/shared/result";
 import { GenericServiceError } from "@/use-cases/errors";
 import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "@/use-cases/errors/todo";
-
-type TResponseOk = IEntityModel<ITodo>;
 
 type TResponseFail =
 	TodoTitleTooShortError |
@@ -14,5 +11,5 @@ type TResponseFail =
 	GenericServiceError;
 
 export interface ICreateTodoResponseModel {
-	response: Result<TResponseOk, TResponseFail>;
+	response: Result<ITodo, TResponseFail>;
 }

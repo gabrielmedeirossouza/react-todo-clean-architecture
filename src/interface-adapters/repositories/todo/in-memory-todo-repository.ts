@@ -1,26 +1,24 @@
 import { ITodo } from "@/entities/interfaces/todo";
-import { IEntityModel } from "@/shared/entity-model";
 import { Result } from "@/shared/result";
 import { GenericServiceError } from "@/use-cases/errors";
 import { ITodoRepository } from "@/use-cases/interfaces/todo";
 
 export class InMemoryTodoRepository implements ITodoRepository {
-	private _todoList: IEntityModel<ITodo>[] = [];
+	private _todoList: ITodo[] = [];
 
-	public async create(todo: ITodo): Promise<Result<string, GenericServiceError>> {
-		const fakeId = String(Math.random() * 10000 + 1);
+	public async create(title: string, description: string, isCompleted: boolean): Promise<Result<string, GenericServiceError>> {
+		const fakeId = crypto.randomUUID();
 		this._todoList.push({
 			id: fakeId,
-			entity: todo
+			title,
+			description,
+			isCompleted
 		});
-
-		console.log(this._todoList);
 
 		return Result.ok(fakeId);
 	}
 
 	public async delete(id: string): Promise<Result<string, GenericServiceError>> {
-		console.log(this._todoList, id);
 		const todoIndex = this._todoList.findIndex(todo => todo.id === id);
 		if (todoIndex === -1) return Result.fail(new GenericServiceError());
 

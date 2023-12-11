@@ -1,13 +1,7 @@
 import { Result } from "@/shared/result";
 import { GenericServiceMessageError, UnknownMessageError } from "../../errors";
 import { TodoDescriptionFieldValidationError, TodoTitleFieldValidationError } from "../../errors/todo";
-
-type TTodoViewModelOk = {
-	readonly id: string;
-	readonly title: string;
-	readonly description: string;
-	readonly isCompleted: boolean;
-}
+import { ITodo } from "@/entities/interfaces/todo";
 
 type TTodoViewModelFail =
 	TodoTitleFieldValidationError |
@@ -16,5 +10,5 @@ type TTodoViewModelFail =
 	UnknownMessageError;
 
 export interface ICreateTodoViewModel {
-	viewModel: Result<TTodoViewModelOk, TTodoViewModelFail>;
+	viewModel: Result<ITodo, TTodoViewModelFail>;
 }
