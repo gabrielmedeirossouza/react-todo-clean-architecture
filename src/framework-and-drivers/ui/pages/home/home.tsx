@@ -1,5 +1,5 @@
-import { useTodoStore } from "@/framework-and-drivers/store/use-todo-store";
 import { useState } from "react";
+import { useTodoStore } from "../../store/use-todo-store";
 
 export const Home = () => {
 	const { todoList, createTodo, deleteTodoById } = useTodoStore();
