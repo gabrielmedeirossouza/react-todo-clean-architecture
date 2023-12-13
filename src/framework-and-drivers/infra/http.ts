@@ -49,7 +49,7 @@ export class Http implements IHttp {
 		}
 	}
 
-	public async delete<T>(url: string): Promise<Result<T, GenericServiceError>> {
+	public async remove<T>(url: string): Promise<Result<T, GenericServiceError>> {
 		try {
 			const response = await fetch(url, {
 				method: "DELETE"

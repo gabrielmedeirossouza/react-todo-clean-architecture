@@ -10,18 +10,28 @@ export const Home = () => {
 	const [globalError, setGlobalError] = useState("");
 
 	const todoController = useOnce(() => todoFactory({
-		createSuccessResponse(response) {
-			setTodoList((prev) => [...prev, response]);
-			setTitle("");
-			setDescription("");
-			setGlobalError("");
+		create: {
+			onCreateTodoSuccess(response) {
+				setTodoList((prev) => [...prev, response]);
+				setTitle("");
+				setDescription("");
+				setGlobalError("");
+			},
+			onCreateTodoFailField(response) {
+				console.log(response);
+			},
+			onCreateTodoFailMessage(response) {
+				console.log(response);
+				setGlobalError(response.message);
+			}
 		},
-		createFailFieldResponse(response) {
-			console.log(response);
-		},
-		createFailMessageResponse(response) {
-			console.log(response);
-			setGlobalError(response.message);
+		remove: {
+			onRemoveTodoSuccess(response) {
+				setTodoList((prev) => prev.filter((todo) => todo.id !== response));
+			},
+			onRemoveTodoFailMessage(response) {
+				console.log(response);
+			}
 		}
 	}));
 
@@ -30,8 +40,8 @@ export const Home = () => {
 		todoController.createTodo(title, description);
 	};
 
-	const handleDeleteTodo = (id: string) => {
-		todoController.deleteTodo(id);
+	const handleRemoveTodo = (id: string) => {
+		todoController.removeTodo(id);
 	};
 
 	return (
@@ -48,7 +58,7 @@ export const Home = () => {
 					<li key={todo.id} style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
 						<h3>{todo.title}</h3>
 						<p>{todo.description}</p>
-						<button type="button" onClick={() => handleDeleteTodo(todo.id)}>Excluir</button>
+						<button type="button" onClick={() => handleRemoveTodo(todo.id)}>Excluir</button>
 					</li>
 				))}
 			</ul>

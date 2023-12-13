@@ -18,7 +18,7 @@ export class InMemoryTodoRepository implements ITodoRepository {
 		return Result.ok(fakeId);
 	}
 
-	public async delete(id: string): Promise<Result<string, GenericServiceError>> {
+	public async remove(id: string): Promise<Result<string, GenericServiceError>> {
 		const todoIndex = this._todoList.findIndex(todo => todo.id === id);
 		if (todoIndex === -1) return Result.fail(new GenericServiceError());
 
