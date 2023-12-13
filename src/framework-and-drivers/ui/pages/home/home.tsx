@@ -1,18 +1,37 @@
-import { useState } from "react";
-import { useTodoStore } from "../../store/use-todo-store";
+import {  useState } from "react";
+import { todoFactory } from "../../factories/todo-factory";
+import { ITodo } from "@/entities/interfaces/todo";
+import { useOnce } from "../../hooks/use-once";
 
 export const Home = () => {
-	const { todoList, createTodo, deleteTodoById } = useTodoStore();
+	const [todoList, setTodoList] = useState<ITodo[]>([]);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
+	const [globalError, setGlobalError] = useState("");
 
-	const handleAddTodo = async (e: React.FormEvent<HTMLFormElement>) => {
+	const todoController = useOnce(() => todoFactory({
+		createSuccessResponse(response) {
+			setTodoList((prev) => [...prev, response]);
+			setTitle("");
+			setDescription("");
+			setGlobalError("");
+		},
+		createFailFieldResponse(response) {
+			console.log(response);
+		},
+		createFailMessageResponse(response) {
+			console.log(response);
+			setGlobalError(response.message);
+		}
+	}));
+
+	const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		createTodo(title, description);
+		todoController.createTodo(title, description);
 	};
 
-	const handleDeleteTodo = async (id: string) => {
-		deleteTodoById(id);
+	const handleDeleteTodo = (id: string) => {
+		todoController.deleteTodo(id);
 	};
 
 	return (
@@ -33,6 +52,8 @@ export const Home = () => {
 					</li>
 				))}
 			</ul>
+
+			{globalError && <p style={{color: "tomato"}}>{globalError}</p>}
 		</div>
 	);
 };
