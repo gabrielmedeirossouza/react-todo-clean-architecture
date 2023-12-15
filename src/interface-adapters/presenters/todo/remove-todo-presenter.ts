@@ -10,11 +10,11 @@ export class RemoveTodoPresenter implements IRemoveTodoOutputPort {
 	) {}
 
 	public removeTodoResponse({ response }: IRemoveTodoResponseModel): void {
-		if (response.ok) return this._viewModel.onRemoveTodoSuccess?.(response.value);
+		if (response.ok) return this._viewModel.removeTodoSuccess?.notify(response.value);
 
 		if (response.error instanceof GenericServiceError)
-			return this._viewModel.onRemoveTodoFailMessage?.(new GenericServiceMessageError());
+			return this._viewModel.removeTodoFailMessage?.notify(new GenericServiceMessageError());
 
-		this._viewModel.onRemoveTodoFailMessage?.(new UnknownMessageError());
+		this._viewModel.removeTodoFailMessage?.notify(new UnknownMessageError());
 	}
 }

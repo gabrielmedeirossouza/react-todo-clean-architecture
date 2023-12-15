@@ -8,37 +8,35 @@ import { ICreateTodoResponseModel, ICreateTodoOutputPort } from "@/use-cases/int
 export class CreateTodoPresenter implements ICreateTodoOutputPort {
 	constructor(
 		private _viewModel: ICreateTodoViewModel
-	) {}
+	) { }
 
 	public createTodoResponse({ response }: ICreateTodoResponseModel): void {
-		if (response.ok) return this._viewModel.onCreateTodoSuccess?.(response.value);
+		if (response.ok) return this._viewModel.createTodoSuccess?.notify(response.value);
 
 		if (response.error instanceof TodoTitleTooShortError)
-			return this._viewModel.onCreateTodoFailField?.(
+			return this._viewModel.createTodoFailField?.notify(
 				new TodoTitleFieldValidationError(`O Título precisa ter pelo menos ${response.error.minLength} caracteres.`)
 			);
 
 		if (response.error instanceof TodoTitleTooLongError)
-			return this._viewModel.onCreateTodoFailField?.(
+			return this._viewModel.createTodoFailField?.notify(
 				new TodoTitleFieldValidationError(`O Título precisa ter no máximo ${response.error.maxLength} caracteres.`)
 			);
 
 
 		if (response.error instanceof TodoDescriptionTooShortError)
-			return this._viewModel.onCreateTodoFailField?.(
+			return this._viewModel.createTodoFailField?.notify(
 				new TodoDescriptionFieldValidationError(`A Descrição precisa ter pelo menos ${response.error.minLength} caracteres.`)
 			);
 
 		if (response.error instanceof TodoDescriptionTooLongError)
-			return this._viewModel.onCreateTodoFailField?.(
+			return this._viewModel.createTodoFailField?.notify(
 				new TodoDescriptionFieldValidationError(`A Descrição precisa ter no máximo ${response.error.maxLength} caracteres.`)
 			);
 
 		if (response.error instanceof GenericServiceError)
-			return this._viewModel.onCreateTodoFailMessage?.(
-				new GenericServiceMessageError()
-			);
+			return this._viewModel.createTodoFailMessage?.notify(new GenericServiceMessageError());
 
-		this._viewModel.onCreateTodoFailMessage?.(new UnknownMessageError());
+		this._viewModel.createTodoFailMessage?.notify(new UnknownMessageError());
 	}
 }

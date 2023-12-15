@@ -7,31 +7,34 @@ import { InMemoryTodoRepository } from "@/interface-adapters/repositories/todo";
 import { CreateTodoUseCase } from "@/use-cases/todo-use-case";
 import { RemoveTodoUseCase } from "@/use-cases/todo-use-case/remove-todo-use-case";
 import { TodoValidationService } from "@/use-cases/todo-use-case/todo-validation-service";
+import { observableFactory } from "./observable-factory";
 
-interface ITodoFactory {
-	create?: ICreateTodoViewModel;
-	remove?: IRemoveTodoViewModel;
-}
-
-export function todoFactory({ create, remove }: ITodoFactory) {
+export function todoFactory() {
 	const todoRepository = new InMemoryTodoRepository();
 	const todoValidationService = new TodoValidationService();
 
-	const createTodoPresenter = new CreateTodoPresenter({
-		onCreateTodoSuccess: create?.onCreateTodoSuccess,
-		onCreateTodoFailField: create?.onCreateTodoFailField,
-		onCreateTodoFailMessage: create?.onCreateTodoFailMessage
-	});
+	const createTodoPresenterObservable = {
+		createTodoSuccess: observableFactory(),
+		createTodoFailField: observableFactory(),
+		createTodoFailMessage: observableFactory()
+	} satisfies ICreateTodoViewModel;
+
+	const removeTodoPresenterObservable = {
+		removeTodoSuccess: observableFactory(),
+		removeTodoFailMessage: observableFactory()
+	} satisfies IRemoveTodoViewModel;
+
+	const createTodoPresenter = new CreateTodoPresenter(createTodoPresenterObservable);
 	const createTodoUseCase = new CreateTodoUseCase(todoValidationService, todoRepository, createTodoPresenter);
 
-	const removeTodoPresenter = new RemoveTodoPresenter({
-		onRemoveTodoSuccess: remove?.onRemoveTodoSuccess,
-		onRemoveTodoFailMessage: remove?.onRemoveTodoFailMessage
-	});
+	const removeTodoPresenter = new RemoveTodoPresenter(removeTodoPresenterObservable);
 	const removeTodoUseCase = new RemoveTodoUseCase(todoRepository, removeTodoPresenter);
 
 	const todoController = new TodoController(createTodoUseCase, removeTodoUseCase);
-	console.log("todoFactory created");
 
-	return todoController;
+	return {
+		todoController,
+		createTodoPresenterObservable,
+		removeTodoPresenterObservable
+	};
 }

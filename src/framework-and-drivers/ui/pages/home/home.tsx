@@ -1,39 +1,24 @@
-import {  useState } from "react";
-import { todoFactory } from "../../factories/todo-factory";
+import { useState } from "react";
+import { todoFactory } from "../../../factories/todo-factory";
 import { ITodo } from "@/entities/interfaces/todo";
-import { useOnce } from "../../hooks/use-once";
+import { useFactory } from "../../hooks/use-factory";
+import { useObserver } from "../../hooks/use-observer";
 
 export const Home = () => {
 	const [todoList, setTodoList] = useState<ITodo[]>([]);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
-	const [globalError, setGlobalError] = useState("");
+	const [globalError] = useState("");
 
-	const todoController = useOnce(() => todoFactory({
-		create: {
-			onCreateTodoSuccess(response) {
-				setTodoList((prev) => [...prev, response]);
-				setTitle("");
-				setDescription("");
-				setGlobalError("");
-			},
-			onCreateTodoFailField(response) {
-				console.log(response);
-			},
-			onCreateTodoFailMessage(response) {
-				console.log(response);
-				setGlobalError(response.message);
-			}
-		},
-		remove: {
-			onRemoveTodoSuccess(response) {
-				setTodoList((prev) => prev.filter((todo) => todo.id !== response));
-			},
-			onRemoveTodoFailMessage(response) {
-				console.log(response);
-			}
-		}
-	}));
+	const { todoController, createTodoPresenterObservable, removeTodoPresenterObservable } = useFactory(() => todoFactory());
+
+	useObserver(createTodoPresenterObservable.createTodoSuccess, (todo) => {
+		setTodoList([...todoList, todo]);
+	});
+
+	useObserver(removeTodoPresenterObservable.removeTodoSuccess, (id) => {
+		setTodoList(todoList.filter((todo) => todo.id !== id));
+	});
 
 	const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -63,7 +48,7 @@ export const Home = () => {
 				))}
 			</ul>
 
-			{globalError && <p style={{color: "tomato"}}>{globalError}</p>}
+			{globalError && <p style={{ color: "tomato" }}>{globalError}</p>}
 		</div>
 	);
 };

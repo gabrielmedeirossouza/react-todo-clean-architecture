@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-export function useOnce<T>(fn: () => T) {
+export function useFactory<T>(fn: () => T) {
 	const memoizedData = useMemo(() => fn(), []);
 
 	return memoizedData;

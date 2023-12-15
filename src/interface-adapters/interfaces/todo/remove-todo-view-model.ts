@@ -1,6 +1,7 @@
 import { GenericServiceMessageError, UnknownMessageError } from "@/interface-adapters/errors";
+import { IObservable } from "../observable";
 
 export interface IRemoveTodoViewModel {
-	onRemoveTodoSuccess?: (id: string) => void;
-	onRemoveTodoFailMessage?: (error: GenericServiceMessageError | UnknownMessageError) => void;
+	removeTodoSuccess?: IObservable<string>;
+	removeTodoFailMessage?: IObservable<GenericServiceMessageError | UnknownMessageError>;
 }
