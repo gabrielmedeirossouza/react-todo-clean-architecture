@@ -10,7 +10,20 @@ export const Home = () => {
 	const [description, setDescription] = useState("");
 	const [globalError] = useState("");
 
-	const { todoController, createTodoPresenterObservable, removeTodoPresenterObservable } = useFactory(() => todoFactory());
+	const {
+		todoController,
+		checkCreateTodoPresenterObservable,
+		createTodoPresenterObservable,
+		removeTodoPresenterObservable
+	} = useFactory(() => todoFactory());
+
+	useObserver(checkCreateTodoPresenterObservable.checkCreateTodoSuccess, () => {
+		console.log("All fields are valid");
+	});
+
+	useObserver(checkCreateTodoPresenterObservable.checkCreateTodoFailField, (error) => {
+		console.log(error);
+	});
 
 	useObserver(createTodoPresenterObservable.createTodoSuccess, (todo) => {
 		setTodoList([...todoList, todo]);
@@ -33,8 +46,14 @@ export const Home = () => {
 		<div>
 			<h1>Home</h1>
 			<form onSubmit={handleAddTodo}>
-				<input type="text" placeholder="título" value={title} onChange={(e) => setTitle(e.target.value)} />
-				<input type="text" placeholder="descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
+				<input type="text" placeholder="título" value={title} onChange={(e) => {
+					todoController.checkTitleCreateTodo(e.target.value);
+					setTitle(e.target.value);
+				}} />
+				<input type="text" placeholder="descrição" value={description} onChange={(e) => {
+					todoController.checkDescriptionCreateTodo(e.target.value);
+					setDescription(e.target.value);
+				}} />
 				<button>Adicionar</button>
 			</form>
 

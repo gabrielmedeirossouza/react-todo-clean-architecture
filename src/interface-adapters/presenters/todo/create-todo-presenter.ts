@@ -1,5 +1,4 @@
-import { GenericServiceMessageError, UnknownMessageError } from "@/interface-adapters/errors";
-import { TodoDescriptionFieldValidationError, TodoTitleFieldValidationError } from "@/interface-adapters/errors/todo";
+import { PresentGenericServiceMessageError, PresentNameTooLongError, PresentNameTooShortError, PresentUnknownMessageError } from "@/interface-adapters/errors";
 import { ICreateTodoViewModel } from "@/interface-adapters/interfaces/todo";
 import { GenericServiceError } from "@/use-cases/errors";
 import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "@/use-cases/errors/todo";
@@ -15,28 +14,27 @@ export class CreateTodoPresenter implements ICreateTodoOutputPort {
 
 		if (response.error instanceof TodoTitleTooShortError)
 			return this._viewModel.createTodoFailField?.notify(
-				new TodoTitleFieldValidationError(`O Título precisa ter pelo menos ${response.error.minLength} caracteres.`)
+				new PresentNameTooShortError("title", response.error.value, `O Título precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
 			);
 
 		if (response.error instanceof TodoTitleTooLongError)
 			return this._viewModel.createTodoFailField?.notify(
-				new TodoTitleFieldValidationError(`O Título precisa ter no máximo ${response.error.maxLength} caracteres.`)
+				new PresentNameTooLongError("title", response.error.value, `O Título precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
 			);
-
 
 		if (response.error instanceof TodoDescriptionTooShortError)
 			return this._viewModel.createTodoFailField?.notify(
-				new TodoDescriptionFieldValidationError(`A Descrição precisa ter pelo menos ${response.error.minLength} caracteres.`)
+				new PresentNameTooShortError("description", response.error.value, `A Descrição precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
 			);
 
 		if (response.error instanceof TodoDescriptionTooLongError)
 			return this._viewModel.createTodoFailField?.notify(
-				new TodoDescriptionFieldValidationError(`A Descrição precisa ter no máximo ${response.error.maxLength} caracteres.`)
+				new PresentNameTooLongError("description", response.error.value, `A Descrição precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
 			);
 
 		if (response.error instanceof GenericServiceError)
-			return this._viewModel.createTodoFailMessage?.notify(new GenericServiceMessageError());
+			return this._viewModel.createTodoFailMessage?.notify(new PresentGenericServiceMessageError());
 
-		this._viewModel.createTodoFailMessage?.notify(new UnknownMessageError());
+		this._viewModel.createTodoFailMessage?.notify(new PresentUnknownMessageError());
 	}
 }

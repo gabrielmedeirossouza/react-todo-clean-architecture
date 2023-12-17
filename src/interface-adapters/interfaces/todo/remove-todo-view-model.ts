@@ -1,7 +1,7 @@
-import { GenericServiceMessageError, UnknownMessageError } from "@/interface-adapters/errors";
 import { IObservable } from "../observable";
+import { IPresentMessage } from "../present-message";
 
 export interface IRemoveTodoViewModel {
 	removeTodoSuccess?: IObservable<string>;
-	removeTodoFailMessage?: IObservable<GenericServiceMessageError | UnknownMessageError>;
+	removeTodoFailMessage?: IObservable<IPresentMessage>;
 }
