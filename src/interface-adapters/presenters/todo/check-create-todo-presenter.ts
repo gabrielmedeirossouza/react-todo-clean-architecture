@@ -1,4 +1,4 @@
-import { PresentNameTooShortError, PresentNameTooLongError, PresentUnknownMessageError } from "@/interface-adapters/errors";
+import { PresentNameTooShortError, PresentNameTooLongErrorDTO, PresentUnknownMessageErrorDTO } from "@/interface-adapters/dtos";
 import { ICheckCreateTodoViewModel } from "@/interface-adapters/interfaces/todo";
 import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "@/use-cases/errors/todo";
 import { ICheckCreateTodoOutputPort, ICheckDescriptionCreateTodoResponseModel, ICheckTitleCreateTodoResponseModel } from "@/use-cases/interfaces/todo";
@@ -18,10 +18,10 @@ export class CheckCreateTodoPresenter implements ICheckCreateTodoOutputPort {
 
 		if (response.error instanceof TodoTitleTooLongError)
 			return this._viewModel.checkCreateTodoFailField?.notify(
-				new PresentNameTooLongError("title", response.error.value, `O Título precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
+				new PresentNameTooLongErrorDTO("title", response.error.value, `O Título precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
 			);
 
-		this._viewModel.checkCreateTodoFailMessage?.notify(new PresentUnknownMessageError());
+		this._viewModel.checkCreateTodoFailMessage?.notify(new PresentUnknownMessageErrorDTO());
 	}
 
 	public checkCreateTodoDescriptionResponse({ response }: ICheckDescriptionCreateTodoResponseModel): void {
@@ -34,9 +34,9 @@ export class CheckCreateTodoPresenter implements ICheckCreateTodoOutputPort {
 
 		if (response.error instanceof TodoDescriptionTooLongError)
 			return this._viewModel.checkCreateTodoFailField?.notify(
-				new PresentNameTooLongError("description", response.error.value, `A Descrição precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
+				new PresentNameTooLongErrorDTO("description", response.error.value, `A Descrição precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
 			);
 
-		this._viewModel.checkCreateTodoFailMessage?.notify(new PresentUnknownMessageError());
+		this._viewModel.checkCreateTodoFailMessage?.notify(new PresentUnknownMessageErrorDTO());
 	}
 }

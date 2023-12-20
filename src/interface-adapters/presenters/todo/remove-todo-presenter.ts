@@ -1,4 +1,4 @@
-import { PresentGenericServiceMessageError, PresentUnknownMessageError } from "@/interface-adapters/errors";
+import { PresentGenericServiceMessageErrorDTO, PresentUnknownMessageErrorDTO } from "@/interface-adapters/dtos";
 import { IRemoveTodoViewModel } from "@/interface-adapters/interfaces/todo/remove-todo-view-model";
 import { GenericServiceError } from "@/use-cases/errors";
 import { IRemoveTodoOutputPort } from "@/use-cases/interfaces/todo/remove-todo-output-port";
@@ -13,8 +13,8 @@ export class RemoveTodoPresenter implements IRemoveTodoOutputPort {
 		if (response.ok) return this._viewModel.removeTodoSuccess?.notify(response.value);
 
 		if (response.error instanceof GenericServiceError)
-			return this._viewModel.removeTodoFailMessage?.notify(new PresentGenericServiceMessageError());
+			return this._viewModel.removeTodoFailMessage?.notify(new PresentGenericServiceMessageErrorDTO());
 
-		this._viewModel.removeTodoFailMessage?.notify(new PresentUnknownMessageError());
+		this._viewModel.removeTodoFailMessage?.notify(new PresentUnknownMessageErrorDTO());
 	}
 }

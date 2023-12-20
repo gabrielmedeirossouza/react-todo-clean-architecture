@@ -1,6 +1,6 @@
-import { IPresentNameTooLong } from "../interfaces/present-name-too-long";
+import { IPresentNameTooLongErrorDTO } from "../interfaces/dtos";
 
-export class PresentNameTooLongError implements IPresentNameTooLong {
+export class PresentNameTooLongErrorDTO implements IPresentNameTooLongErrorDTO {
 	public readonly currentLength: number;
 
 	constructor(
