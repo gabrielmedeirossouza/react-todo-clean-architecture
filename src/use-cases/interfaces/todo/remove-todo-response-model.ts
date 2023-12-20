@@ -1,6 +1,6 @@
 import { Result } from "@/shared/result";
-import { GenericServiceError } from "@/use-cases/errors";
+import { IMessageDTO } from "../dtos";
 
 export interface IRemoveTodoResponseModel {
-	response: Result<string, GenericServiceError>;
+	response: Result<string, IMessageDTO>;
 }

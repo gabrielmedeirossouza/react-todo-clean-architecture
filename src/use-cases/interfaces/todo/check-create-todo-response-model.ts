@@ -1,10 +1,10 @@
 import { Result } from "@/shared/result";
-import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "@/use-cases/errors/todo";
+import { INameTooLongErrorDTO, INameTooLongSuccessDTO, INameTooShortErrorDTO, INameTooShortSuccessDTO } from "../dtos";
 
 export interface ICheckTitleCreateTodoResponseModel {
-	response: Result<void, TodoTitleTooShortError | TodoTitleTooLongError>
+	response: Result<INameTooShortSuccessDTO | INameTooLongSuccessDTO, INameTooShortErrorDTO | INameTooLongErrorDTO>
 }
 
 export interface ICheckDescriptionCreateTodoResponseModel {
-	response: Result<void, TodoDescriptionTooShortError | TodoDescriptionTooLongError>
+	response: Result<INameTooShortSuccessDTO | INameTooLongSuccessDTO, INameTooShortErrorDTO | INameTooLongErrorDTO>
 }

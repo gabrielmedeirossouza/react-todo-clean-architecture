@@ -8,8 +8,8 @@ export class CheckCreateTodoPresenter implements ICheckCreateTodoOutputPort {
 		private _viewModel: ICheckCreateTodoViewModel
 	) {}
 
-	public checkTitleCreateTodoResponse({ response }: ICheckTitleCreateTodoResponseModel): void {
-		if (response.ok) return this._viewModel.checkCreateTodoSuccess?.notify();
+	public checkCreateTodoTitleResponse({ response }: ICheckTitleCreateTodoResponseModel): void {
+		if (response.ok) return this._viewModel.checkCreateTodoSuccess?.notify({ field: "title" });
 
 		if (response.error instanceof TodoTitleTooShortError)
 			return this._viewModel.checkCreateTodoFailField?.notify(
@@ -21,11 +21,11 @@ export class CheckCreateTodoPresenter implements ICheckCreateTodoOutputPort {
 				new PresentNameTooLongError("title", response.error.value, `O Título precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
 			);
 
-		this._viewModel.checkCreateTodoFailField?.notify(new PresentUnknownMessageError());
+		this._viewModel.checkCreateTodoFailMessage?.notify(new PresentUnknownMessageError());
 	}
 
-	public checkDescriptionCreateTodoResponse({ response }: ICheckDescriptionCreateTodoResponseModel): void {
-		if (response.ok) return this._viewModel.checkCreateTodoSuccess?.notify();
+	public checkCreateTodoDescriptionResponse({ response }: ICheckDescriptionCreateTodoResponseModel): void {
+		if (response.ok) return this._viewModel.checkCreateTodoSuccess?.notify({ field: "description" });
 
 		if (response.error instanceof TodoDescriptionTooShortError)
 			return this._viewModel.checkCreateTodoFailField?.notify(
@@ -37,6 +37,6 @@ export class CheckCreateTodoPresenter implements ICheckCreateTodoOutputPort {
 				new PresentNameTooLongError("description", response.error.value, `A Descrição precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
 			);
 
-		this._viewModel.checkCreateTodoFailField?.notify(new PresentUnknownMessageError());
+		this._viewModel.checkCreateTodoFailMessage?.notify(new PresentUnknownMessageError());
 	}
 }

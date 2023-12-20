@@ -3,6 +3,7 @@ import { todoFactory } from "../../../factories/todo-factory";
 import { ITodo } from "@/entities/interfaces/todo";
 import { useFactory } from "../../hooks/use-factory";
 import { useObserver } from "../../hooks/use-observer";
+import { InputText } from "../../components/input-text";
 
 export const Home = () => {
 	const [todoList, setTodoList] = useState<ITodo[]>([]);
@@ -46,14 +47,28 @@ export const Home = () => {
 		<div>
 			<h1>Home</h1>
 			<form onSubmit={handleAddTodo}>
-				<input type="text" placeholder="título" value={title} onChange={(e) => {
-					todoController.checkTitleCreateTodo(e.target.value);
-					setTitle(e.target.value);
-				}} />
-				<input type="text" placeholder="descrição" value={description} onChange={(e) => {
-					todoController.checkDescriptionCreateTodo(e.target.value);
-					setDescription(e.target.value);
-				}} />
+				<InputText
+					name="title"
+					value={title} onChange={(e) => {
+						todoController.checkTitleCreateTodo(e);
+						setTitle(e);
+					}}
+					error={{
+						onFill: checkCreateTodoPresenterObservable.checkCreateTodoFailField,
+						onClear: checkCreateTodoPresenterObservable.checkCreateTodoSuccess
+					}}
+				/>
+				<InputText
+					name="description"
+					value={description} onChange={(e) => {
+						todoController.checkDescriptionCreateTodo(e);
+						setDescription(e);
+					}}
+					error={{
+						onFill: checkCreateTodoPresenterObservable.checkCreateTodoFailField,
+						onClear: checkCreateTodoPresenterObservable.checkCreateTodoSuccess
+					}}
+				/>
 				<button>Adicionar</button>
 			</form>
 

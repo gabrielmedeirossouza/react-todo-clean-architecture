@@ -1,15 +1,19 @@
 import { ITodo } from "@/entities/interfaces/todo";
 import { Result } from "@/shared/result";
-import { GenericServiceError } from "@/use-cases/errors";
-import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "@/use-cases/errors/todo";
-
-type TResponseFail =
-	TodoTitleTooShortError |
-	TodoTitleTooLongError |
-	TodoDescriptionTooShortError |
-	TodoDescriptionTooLongError |
-	GenericServiceError;
+import { IMessageDTO, INameTooLongErrorDTO, INameTooLongSuccessDTO, INameTooShortErrorDTO, INameTooShortSuccessDTO } from "../dtos";
 
 export interface ICreateTodoResponseModel {
-	response: Result<ITodo, TResponseFail>;
+	response: Result<ITodo, void>;
+}
+
+export interface ICreateTodoTitleResponseModel {
+	response: Result<INameTooShortSuccessDTO | INameTooLongSuccessDTO, INameTooShortErrorDTO | INameTooLongErrorDTO>
+}
+
+export interface ICreateTodoDescriptionResponseModel {
+	response: Result<INameTooShortSuccessDTO | INameTooLongSuccessDTO, INameTooShortErrorDTO | INameTooLongErrorDTO>
+}
+
+export interface ICreateTodoServiceResponseModel {
+	response: Result<void, IMessageDTO>
 }

@@ -1,6 +1,4 @@
-import { Result } from "@/shared/result";
 import { ICheckCreateTodoInputPort, ICheckCreateTodoOutputPort, ICheckDescriptionCreateTodoRequestModel, ICheckTitleCreateTodoRequestModel, ITodoValidationService } from "../interfaces/todo";
-import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "../errors/todo";
 
 export class CheckCreateTodoUseCase implements ICheckCreateTodoInputPort {
 	constructor(
@@ -9,21 +7,26 @@ export class CheckCreateTodoUseCase implements ICheckCreateTodoInputPort {
 	) { }
 
 	public checkTitleCreateTodoRequest({ title }: ICheckTitleCreateTodoRequestModel): void {
-		if (!this._todoValidationService.validateTitleTooShort(title))
-			return this._todoOutputPort.checkTitleCreateTodoResponse({ response: Result.fail(new TodoTitleTooShortError(title, this._todoValidationService.TITLE_MIN_LENGTH)) });
-		if (!this._todoValidationService.validateTitleTooLong(title))
-			return this._todoOutputPort.checkTitleCreateTodoResponse({ response: Result.fail(new TodoTitleTooLongError(title, this._todoValidationService.TITLE_MAX_LENGTH)) });
+		const results = [
+			this._todoValidationService.validateTitleTooShort(title),
+			this._todoValidationService.validateTitleTooLong(title),
+		] as const;
 
-		this._todoOutputPort.checkTitleCreateTodoResponse({ response: Result.ok(undefined) });
+		const [titleTooShort, titleTooLong] = results;
+
+		this._todoOutputPort.checkCreateTodoTitleResponse({ response: titleTooShort });
+		this._todoOutputPort.checkCreateTodoTitleResponse({ response: titleTooLong });
 	}
 
 	public checkDescriptionCreateTodoRequest({ description }: ICheckDescriptionCreateTodoRequestModel): void {
-		if (!this._todoValidationService.validateDescriptionTooShort(description))
-			return this._todoOutputPort.checkDescriptionCreateTodoResponse({ response: Result.fail(new TodoDescriptionTooShortError(description, this._todoValidationService.DESCRIPTION_MIN_LENGTH)) });
+		const results = [
+			this._todoValidationService.validateDescriptionTooShort(description),
+			this._todoValidationService.validateDescriptionTooLong(description)
+		] as const;
 
-		if (!this._todoValidationService.validateDescriptionTooLong(description))
-			return this._todoOutputPort.checkDescriptionCreateTodoResponse({ response: Result.fail(new TodoDescriptionTooLongError(description, this._todoValidationService.DESCRIPTION_MAX_LENGTH)) });
+		const [descriptionTooShort, descriptionTooLong] = results;
 
-		this._todoOutputPort.checkDescriptionCreateTodoResponse({ response: Result.ok(undefined) });
+		this._todoOutputPort.checkCreateTodoDescriptionResponse({ response: descriptionTooShort });
+		this._todoOutputPort.checkCreateTodoDescriptionResponse({ response: descriptionTooLong });
 	}
 }
