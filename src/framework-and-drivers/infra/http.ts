@@ -3,7 +3,6 @@ import { GenericServiceDTO } from "@/use-cases/dtos";
 import { IMessageDTO } from "@/use-cases/interfaces/dtos";
 import { IHttp } from "@/use-cases/interfaces/http";
 
-
 export class Http implements IHttp {
 	public async get<T>(url: string): Promise<Result<T, IMessageDTO>> {
 		try {

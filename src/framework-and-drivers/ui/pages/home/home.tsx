@@ -3,13 +3,13 @@ import { todoFactory } from "../../../factories/todo-factory";
 import { ITodo } from "@/entities/interfaces/todo";
 import { useFactory } from "../../hooks/use-factory";
 import { useObserver } from "../../hooks/use-observer";
-import { InputText } from "../../components/input-text";
+import { InputTextPrefab } from "../../prefabs/input-text-prefab";
 
 export const Home = () => {
 	const [todoList, setTodoList] = useState<ITodo[]>([]);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
-	const [global] = useState("");
+	const [globalError] = useState("");
 
 	const {
 		todoController,
@@ -39,18 +39,22 @@ export const Home = () => {
 		<div>
 			<h1>Home</h1>
 			<form onSubmit={handleAddTodo}>
-				<InputText
+				<InputTextPrefab
+					label="Título"
 					name="title"
-					value={title} onChange={(e) => {
+					value={title}
+					onChange={(e) => {
 						todoController.checkCreateTodoTitle(e);
 						setTitle(e);
 					}}
 					error={checkCreateTodoPresenterObservable.checkCreateTodoField}
 				/>
 
-				<InputText
+				<InputTextPrefab
+					label="Descrição"
 					name="description"
-					value={description} onChange={(e) => {
+					value={description}
+					onChange={(e) => {
 						todoController.checkCreateTodoDescription(e);
 						setDescription(e);
 					}}
@@ -69,7 +73,7 @@ export const Home = () => {
 				))}
 			</ul>
 
-			{global && <p style={{ color: "tomato" }}>{global}</p>}
+			{globalError && <p style={{ color: "tomato" }}>{globalError}</p>}
 		</div>
 	);
 };
