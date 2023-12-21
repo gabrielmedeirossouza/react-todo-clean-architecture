@@ -1,6 +1,6 @@
 import { ITodo } from "@/entities/interfaces/todo";
 import { Result } from "@/shared/result";
-import { GenericServiceErrorDTO } from "@/use-cases/dtos";
+import { GenericServiceDTO } from "@/use-cases/dtos";
 import { IMessageDTO } from "@/use-cases/interfaces/dtos";
 import { ITodoRepository } from "@/use-cases/interfaces/todo";
 
@@ -21,7 +21,7 @@ export class InMemoryTodoRepository implements ITodoRepository {
 
 	public async remove(id: string): Promise<Result<string, IMessageDTO>> {
 		const todoIndex = this._todoList.findIndex(todo => todo.id === id);
-		if (todoIndex === -1) return Result.fail(new GenericServiceErrorDTO());
+		if (todoIndex === -1) return Result.fail(new GenericServiceDTO());
 
 		this._todoList.splice(todoIndex, 1);
 		return Result.ok(id);

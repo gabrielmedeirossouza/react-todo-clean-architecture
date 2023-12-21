@@ -1,26 +1,26 @@
 type Ok<T> = {
 	ok: true,
-	value: T
+	okValue: T
 };
 
 type Fail<K> = {
 	ok: false,
-	error: K
+	failValue: K
 };
 
 export type Result<T, K> = Ok<T> | Fail<K>;
 
 export const Result = {
-	ok<T>(value: T): Result<T, never> {
+	ok<T>(okValue: T): Result<T, never> {
 		return {
 			ok: true,
-			value
+			okValue
 		};
 	},
-	fail<K>(error: K): Result<never, K> {
+	fail<K>(failValue: K): Result<never, K> {
 		return {
 			ok: false,
-			error
+			failValue
 		};
 	}
 };

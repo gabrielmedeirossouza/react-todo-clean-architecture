@@ -1,16 +1,14 @@
 import { IFieldDTO, IMessageDTO, INameTooLongDTO, INameTooShortDTO } from "../interfaces/dtos";
 
-export class FieldDTO implements IFieldDTO {
-	constructor(
-		public readonly field: string
-	) {}
+export class GenericServiceDTO implements IMessageDTO {
+	public readonly message = "Generic service error";
 
 	public isFieldDTO(): this is IFieldDTO {
-		return true;
+		return false;
 	}
 
 	public isMessageDTO(): this is IMessageDTO {
-		return false;
+		return true;
 	}
 
 	public isNameTooShortDTO(): this is INameTooShortDTO {

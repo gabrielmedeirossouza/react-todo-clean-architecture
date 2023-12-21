@@ -1,10 +1,8 @@
-import { IFieldDTO, IMessageDTO, INameTooLongErrorDTO, INameTooLongSuccessDTO, INameTooShortErrorDTO, INameTooShortSuccessDTO } from ".";
+import { IFieldDTO, IMessageDTO, INameTooLongDTO, INameTooShortDTO } from ".";
 
 export interface IBaseDTO {
 	isFieldDTO(): this is IFieldDTO;
 	isMessageDTO(): this is IMessageDTO;
-	isNameTooLongSuccessDTO(): this is INameTooLongSuccessDTO;
-	isNameTooLongErrorDTO(): this is INameTooLongErrorDTO;
-	isNameTooShortSuccessDTO(): this is INameTooShortSuccessDTO;
-	isNameTooShortErrorDTO(): this is INameTooShortErrorDTO;
+	isNameTooLongDTO(): this is INameTooLongDTO;
+	isNameTooShortDTO(): this is INameTooShortDTO;
 }

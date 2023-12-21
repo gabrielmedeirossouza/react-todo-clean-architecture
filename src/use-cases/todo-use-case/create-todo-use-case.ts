@@ -21,13 +21,13 @@ export class CreateTodoUseCase implements ICreateTodoInputPort {
 		if (!resultDescriptionTooShort.ok) this._todoOutputPort.createTodoDescriptionResponse({ response: resultDescriptionTooShort });
 		if (!resultDescriptionTooLong.ok) this._todoOutputPort.createTodoDescriptionResponse({ response: resultDescriptionTooLong });
 
-		const hasError =
+		const has =
 			!resultTitleTooShort.ok ||
 			!resultTitleTooLong.ok ||
 			!resultDescriptionTooShort.ok ||
 			!resultDescriptionTooLong.ok;
 
-		if (hasError) return this._todoOutputPort.createTodoResponse({ response: Result.fail(undefined) });
+		if (has) return this._todoOutputPort.createTodoResponse({ response: Result.fail(undefined) });
 
 		this._todoOutputPort.createTodoTitleResponse({ response: Result.ok(new FieldDTO("title")) });
 		this._todoOutputPort.createTodoDescriptionResponse({ response: Result.ok(new FieldDTO("description")) });
@@ -35,7 +35,7 @@ export class CreateTodoUseCase implements ICreateTodoInputPort {
 		const createdTodo = await this._todoRepository.create(title, description, false);
 		if (!createdTodo.ok) return this._todoOutputPort.createTodoServiceResponse({ response: createdTodo });
 		this._todoOutputPort.createTodoServiceResponse({ response: Result.ok(undefined) });
-		const todo = new Todo(createdTodo.value, title, description, false);
+		const todo = new Todo(createdTodo.okValue, title, description, false);
 
 		this._todoOutputPort.createTodoResponse({ response: Result.ok(todo) });
 	}

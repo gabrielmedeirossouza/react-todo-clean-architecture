@@ -12,15 +12,15 @@ interface IInputTextProps {
 }
 
 export function InputText({ name, value, onChange, error }: IInputTextProps) {
-	const [errorMessage, setErrorMessage] = useState("");
+	const [errorMessage, setMessage] = useState("");
 
 	useObserver(error, (result) => {
-		if (!result.ok && result.error.isPresentFieldDTO() && result.error.isPresentMessageDTO() && result.error.field === name) {
-			setErrorMessage(result.error.message);
+		if (!result.ok && result.failValue.isPresentFieldDTO() && result.failValue.isPresentMessageDTO() && result.failValue.field === name) {
+			setMessage(result.failValue.message);
 		}
 
-		if (result.ok && result.value.isPresentFieldDTO() && result.value.field === name) {
-			setErrorMessage("");
+		if (result.ok && result.okValue.isPresentFieldDTO() && result.okValue.field === name) {
+			setMessage("");
 		}
 	});
 

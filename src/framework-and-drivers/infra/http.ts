@@ -1,5 +1,5 @@
 import { Result } from "@/shared/result";
-import { GenericServiceErrorDTO } from "@/use-cases/dtos";
+import { GenericServiceDTO } from "@/use-cases/dtos";
 import { IMessageDTO } from "@/use-cases/interfaces/dtos";
 import { IHttp } from "@/use-cases/interfaces/http";
 
@@ -12,7 +12,7 @@ export class Http implements IHttp {
 
 			return Result.ok(data as T);
 		} catch (error) {
-			return Result.fail(new GenericServiceErrorDTO());
+			return Result.fail(new GenericServiceDTO());
 		}
 	}
 
@@ -29,7 +29,7 @@ export class Http implements IHttp {
 
 			return Result.ok(data as T);
 		} catch (error) {
-			return Result.fail(new GenericServiceErrorDTO());
+			return Result.fail(new GenericServiceDTO());
 		}
 	}
 
@@ -46,7 +46,7 @@ export class Http implements IHttp {
 
 			return Result.ok(data as T);
 		} catch (error) {
-			return Result.fail(new GenericServiceErrorDTO());
+			return Result.fail(new GenericServiceDTO());
 		}
 	}
 
@@ -59,7 +59,7 @@ export class Http implements IHttp {
 
 			return Result.ok(data as T);
 		} catch (error) {
-			return Result.fail(new GenericServiceErrorDTO());
+			return Result.fail(new GenericServiceDTO());
 		}
 	}
 }

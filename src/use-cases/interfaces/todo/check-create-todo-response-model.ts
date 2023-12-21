@@ -1,10 +1,10 @@
 import { Result } from "@/shared/result";
-import { INameTooLongErrorDTO, INameTooShortErrorDTO } from "../dtos";
+import { INameTooLongDTO, INameTooShortDTO } from "../dtos";
 
 export interface ICheckTitleCreateTodoResponseModel {
-	response: Result<void, INameTooShortErrorDTO | INameTooLongErrorDTO>
+	response: Result<void, INameTooShortDTO | INameTooLongDTO>
 }
 
 export interface ICheckDescriptionCreateTodoResponseModel {
-	response: Result<void, INameTooShortErrorDTO | INameTooLongErrorDTO>
+	response: Result<void, INameTooShortDTO | INameTooLongDTO>
 }

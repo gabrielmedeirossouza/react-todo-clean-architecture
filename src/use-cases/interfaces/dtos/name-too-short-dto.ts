@@ -1,8 +1,8 @@
 import { IFieldDTO } from "./field-dto";
 import { IMessageDTO } from "./message-dto";
 
-export interface INameTooLongErrorDTO extends IFieldDTO, IMessageDTO {
+export interface INameTooShortDTO extends IFieldDTO, IMessageDTO {
 	readonly currentLength: number;
-	readonly maxLength: number;
+	readonly minLength: number;
 	readonly value: string;
 }

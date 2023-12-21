@@ -9,7 +9,7 @@ export const Home = () => {
 	const [todoList, setTodoList] = useState<ITodo[]>([]);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
-	const [globalError] = useState("");
+	const [global] = useState("");
 
 	const {
 		todoController,
@@ -19,11 +19,11 @@ export const Home = () => {
 	} = useFactory(() => todoFactory());
 
 	useObserver(createTodoPresenterObservable.createTodo, (result) => {
-		if (result.ok) setTodoList([...todoList, result.value]);
+		if (result.ok) setTodoList([...todoList, result.okValue]);
 	});
 
 	useObserver(removeTodoPresenterObservable.removeTodo, (result) => {
-		if (result.ok) setTodoList(todoList.filter((todo) => todo.id !== result.value));
+		if (result.ok) setTodoList(todoList.filter((todo) => todo.id !== result.okValue));
 	});
 
 	const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,7 +69,7 @@ export const Home = () => {
 				))}
 			</ul>
 
-			{globalError && <p style={{ color: "tomato" }}>{globalError}</p>}
+			{global && <p style={{ color: "tomato" }}>{global}</p>}
 		</div>
 	);
 };
