@@ -1,8 +1,8 @@
-import { PresentGenericServiceMessageErrorDTO, PresentNameTooLongErrorDTO, PresentNameTooShortError, PresentUnknownMessageErrorDTO } from "@/interface-adapters/dtos";
+import { PresentGenericServiceMessageErrorDTO, PresentNameTooLongErrorDTO, PresentNameTooShortErrorDTO, PresentUnknownMessageErrorDTO } from "@/interface-adapters/dtos";
+import { PresentFieldDTO } from "@/interface-adapters/dtos/present-field-dto";
 import { ICreateTodoViewModel } from "@/interface-adapters/interfaces/todo";
-import { GenericServiceError } from "@/use-cases/errors";
-import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "@/use-cases/errors/todo";
-import { ICreateTodoResponseModel, ICreateTodoOutputPort } from "@/use-cases/interfaces/todo";
+import { Result } from "@/shared/result";
+import { ICreateTodoDescriptionResponseModel, ICreateTodoOutputPort, ICreateTodoResponseModel, ICreateTodoServiceResponseModel, ICreateTodoTitleResponseModel } from "@/use-cases/interfaces/todo";
 
 export class CreateTodoPresenter implements ICreateTodoOutputPort {
 	constructor(
@@ -10,31 +10,44 @@ export class CreateTodoPresenter implements ICreateTodoOutputPort {
 	) { }
 
 	public createTodoResponse({ response }: ICreateTodoResponseModel): void {
-		if (response.ok) return this._viewModel.createTodoSuccess?.notify(response.value);
+		if (response.ok) return this._viewModel.createTodo?.notify(Result.ok(response.value));
+		this._viewModel.createTodo?.notify(Result.fail(undefined));
+	}
 
-		if (response.error instanceof TodoTitleTooShortError)
-			return this._viewModel.createTodoFailField?.notify(
-				new PresentNameTooShortError("title", response.error.value, `O Título precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
-			);
+	public createTodoTitleResponse({ response }: ICreateTodoTitleResponseModel): void {
+		if (response.ok) return this._viewModel.createTodoField?.notify(Result.ok(new PresentFieldDTO("title")));
 
-		if (response.error instanceof TodoTitleTooLongError)
-			return this._viewModel.createTodoFailField?.notify(
-				new PresentNameTooLongErrorDTO("title", response.error.value, `O Título precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
-			);
+		if (response.error.isNameTooShortErrorDTO())
+			return this._viewModel.createTodoField?.notify(Result.fail(
+				new PresentNameTooShortErrorDTO("title", response.error.value, `O título precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
+			));
 
-		if (response.error instanceof TodoDescriptionTooShortError)
-			return this._viewModel.createTodoFailField?.notify(
-				new PresentNameTooShortError("description", response.error.value, `A Descrição precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
-			);
+		if (response.error.isNameTooLongErrorDTO())
+			return this._viewModel.createTodoField?.notify(Result.fail(
+				new PresentNameTooLongErrorDTO("title", response.error.value, `O título precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
+			));
 
-		if (response.error instanceof TodoDescriptionTooLongError)
-			return this._viewModel.createTodoFailField?.notify(
-				new PresentNameTooLongErrorDTO("description", response.error.value, `A Descrição precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
-			);
+		this._viewModel.createTodoField?.notify(Result.fail(new PresentUnknownMessageErrorDTO()));
+	}
 
-		if (response.error instanceof GenericServiceError)
-			return this._viewModel.createTodoFailMessage?.notify(new PresentGenericServiceMessageErrorDTO());
+	public createTodoDescriptionResponse({ response }: ICreateTodoDescriptionResponseModel): void {
+		if (response.ok) return this._viewModel.createTodoField?.notify(Result.ok(new PresentFieldDTO("description")));
 
-		this._viewModel.createTodoFailMessage?.notify(new PresentUnknownMessageErrorDTO());
+		if (response.error.isNameTooShortErrorDTO())
+			return this._viewModel.createTodoField?.notify(Result.fail(
+				new PresentNameTooShortErrorDTO("description", response.error.value, `A descrição precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
+			));
+
+		if (response.error.isNameTooLongErrorDTO())
+			return this._viewModel.createTodoField?.notify(Result.fail(
+				new PresentNameTooLongErrorDTO("description", response.error.value, `A descrição precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
+			));
+
+		this._viewModel.createTodoField?.notify(Result.fail(new PresentUnknownMessageErrorDTO()));
+	}
+
+	public createTodoServiceResponse({ response }: ICreateTodoServiceResponseModel): void {
+		if (response.ok) return this._viewModel.createTodoMessage?.notify(Result.ok(undefined));
+		this._viewModel.createTodoMessage?.notify(Result.fail(new PresentGenericServiceMessageErrorDTO()));
 	}
 }

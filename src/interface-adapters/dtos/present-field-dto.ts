@@ -1,23 +1,16 @@
 import { IPresentFieldDTO, IPresentMessageDTO, IPresentNameTooLongErrorDTO, IPresentNameTooLongSuccessDTO, IPresentNameTooShortErrorDTO, IPresentNameTooShortSuccessDTO } from "../interfaces/dtos";
 
-export class PresentNameTooShortErrorDTO implements IPresentNameTooShortErrorDTO {
-	public readonly currentLength: number;
-
+export class PresentFieldDTO implements IPresentFieldDTO {
 	constructor(
 		public readonly field: string,
-		public readonly value: string,
-		public readonly message: string,
-		public readonly minLength: number
-	) {
-		this.currentLength = value.length;
-	}
+	) {}
 
 	public isPresentFieldDTO(): this is IPresentFieldDTO {
 		return true;
 	}
 
 	public isPresentMessageDTO(): this is IPresentMessageDTO {
-		return true;
+		return false;
 	}
 
 	public isPresentNameTooShortSuccessDTO(): this is IPresentNameTooShortSuccessDTO {
@@ -25,7 +18,7 @@ export class PresentNameTooShortErrorDTO implements IPresentNameTooShortErrorDTO
 	}
 
 	public isPresentNameTooShortErrorDTO(): this is IPresentNameTooShortErrorDTO {
-		return true;
+		return false;
 	}
 
 	public isPresentNameTooLongSuccessDTO(): this is IPresentNameTooLongSuccessDTO {

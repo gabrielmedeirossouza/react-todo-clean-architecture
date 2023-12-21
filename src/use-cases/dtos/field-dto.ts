@@ -1,26 +1,20 @@
 import { IFieldDTO, IMessageDTO, INameTooLongErrorDTO, INameTooLongSuccessDTO, INameTooShortErrorDTO, INameTooShortSuccessDTO } from "../interfaces/dtos";
 
-export class NameTooShortSuccessDTO implements INameTooShortSuccessDTO {
-	public readonly currentLength: number;
-
+export class FieldDTO implements IFieldDTO {
 	constructor(
-				public readonly field: string,
-				public readonly value: string,
-				public readonly minLength: number
-	) {
-		this.currentLength = value.length;
-	}
+		public readonly field: string
+	) {}
 
 	public isFieldDTO(): this is IFieldDTO {
 		return true;
 	}
 
 	public isMessageDTO(): this is IMessageDTO {
-		return true;
+		return false;
 	}
 
 	public isNameTooShortSuccessDTO(): this is INameTooShortSuccessDTO {
-		return true;
+		return false;
 	}
 
 	public isNameTooShortErrorDTO(): this is INameTooShortErrorDTO {

@@ -1,5 +1,4 @@
-import { IPresentFieldDTO } from "./present-field-dto";
-import { IPresentMessageDTO } from "./present-message-dto";
+import { IPresentFieldDTO, IPresentMessageDTO } from ".";
 
 export interface IPresentNameTooShortErrorDTO extends IPresentFieldDTO, IPresentMessageDTO {
 	readonly currentLength: number;

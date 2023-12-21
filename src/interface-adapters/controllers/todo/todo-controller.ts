@@ -18,11 +18,11 @@ export class TodoController implements ITodoController {
 		this._removeTodoUseCase = removeTodoUseCase;
 	}
 
-	public checkTitleCreateTodo(title: string): void {
+	public checkCreateTodoTitle(title: string): void {
 		this._checkCreateTodoUseCase.checkTitleCreateTodoRequest({ title });
 	}
 
-	public checkDescriptionCreateTodo(description: string): void {
+	public checkCreateTodoDescription(description: string): void {
 		this._checkCreateTodoUseCase.checkDescriptionCreateTodoRequest({ description });
 	}
 

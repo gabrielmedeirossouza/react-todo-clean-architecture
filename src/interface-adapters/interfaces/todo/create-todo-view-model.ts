@@ -1,8 +1,10 @@
-import { ITodo } from "@/entities/interfaces/todo";
 import { IObservable } from "../observable";
+import { Result } from "@/shared/result";
+import { ITodo } from "@/entities/interfaces/todo";
+import { IPresentFieldDTO, IPresentMessageDTO, IPresentNameTooLongErrorDTO, IPresentNameTooShortErrorDTO } from "../dtos";
 
 export interface ICreateTodoViewModel {
-	createTodoSuccess?: IObservable<ITodo>;
-	createTodoFailField?: IObservable<IPresentNameTooShort | IPresentNameTooLong>;
-	createTodoFailMessage?: IObservable<IPresentMessage>;
+	createTodo?: IObservable<Result<ITodo, void>>;
+	createTodoField?: IObservable<Result<IPresentFieldDTO, IPresentNameTooShortErrorDTO | IPresentNameTooLongErrorDTO | IPresentMessageDTO>>;
+	createTodoMessage?: IObservable<Result<void, IPresentMessageDTO>>;
 }

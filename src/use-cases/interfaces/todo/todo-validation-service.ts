@@ -1,9 +1,13 @@
 import { Result } from "@/shared/result";
-import { INameTooLongErrorDTO, INameTooLongSuccessDTO, INameTooShortErrorDTO, INameTooShortSuccessDTO } from "../dtos";
+import { INameTooLongErrorDTO, INameTooShortErrorDTO } from "../dtos";
 
 export interface ITodoValidationService {
-	validateTitleTooShort(title: string): Result<INameTooShortSuccessDTO, INameTooShortErrorDTO>;
-	validateTitleTooLong(title: string): Result<INameTooLongSuccessDTO, INameTooLongErrorDTO>;
-	validateDescriptionTooShort(description: string): Result<INameTooShortSuccessDTO, INameTooShortErrorDTO>;
-	validateDescriptionTooLong(description: string): Result<INameTooLongSuccessDTO, INameTooLongErrorDTO>;
+	readonly TITLE_MIN_LENGTH: number;
+	readonly TITLE_MAX_LENGTH: number;
+	readonly DESCRIPTION_MIN_LENGTH: number;
+	readonly DESCRIPTION_MAX_LENGTH: number;
+	validateTitleTooShort(title: string): Result<void, INameTooShortErrorDTO>;
+	validateTitleTooLong(title: string): Result<void, INameTooLongErrorDTO>;
+	validateDescriptionTooShort(description: string): Result<void, INameTooShortErrorDTO>;
+	validateDescriptionTooLong(description: string): Result<void, INameTooLongErrorDTO>;
 }

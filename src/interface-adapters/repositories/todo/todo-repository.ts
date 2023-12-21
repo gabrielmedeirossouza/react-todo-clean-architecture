@@ -1,5 +1,5 @@
 import { Result } from "@/shared/result";
-import { GenericServiceError } from "@/use-cases/errors";
+import { IMessageDTO } from "@/use-cases/interfaces/dtos";
 import { IHttp } from "@/use-cases/interfaces/http";
 import { ITodoRepository } from "@/use-cases/interfaces/todo";
 
@@ -9,7 +9,7 @@ export class TodoRepository implements ITodoRepository {
 		private _http: IHttp
 	) {}
 
-	public async create(title: string, description: string, isCompleted: boolean): Promise<Result<string, GenericServiceError>> {
+	public async create(title: string, description: string, isCompleted: boolean): Promise<Result<string, IMessageDTO>> {
 		const response = await this._http.post("www.it-is-a-fake-url.com", {
 			title,
 			description,
@@ -21,7 +21,7 @@ export class TodoRepository implements ITodoRepository {
 		return Result.ok(String(Math.random() * 10000 + 1));
 	}
 
-	public async remove(id: string): Promise<Result<string, GenericServiceError>> {
+	public async remove(id: string): Promise<Result<string, IMessageDTO>> {
 		const response = await this._http.remove(`www.it-is-a-fake-url.com/${id}`);
 		if (!response.ok) return response;
 

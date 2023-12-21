@@ -18,20 +18,12 @@ export const Home = () => {
 		removeTodoPresenterObservable
 	} = useFactory(() => todoFactory());
 
-	useObserver(checkCreateTodoPresenterObservable.checkCreateTodoSuccess, () => {
-		console.log("All fields are valid");
+	useObserver(createTodoPresenterObservable.createTodo, (result) => {
+		if (result.ok) setTodoList([...todoList, result.value]);
 	});
 
-	useObserver(checkCreateTodoPresenterObservable.checkCreateTodoFailField, (error) => {
-		console.log(error);
-	});
-
-	useObserver(createTodoPresenterObservable.createTodoSuccess, (todo) => {
-		setTodoList([...todoList, todo]);
-	});
-
-	useObserver(removeTodoPresenterObservable.removeTodoSuccess, (id) => {
-		setTodoList(todoList.filter((todo) => todo.id !== id));
+	useObserver(removeTodoPresenterObservable.removeTodo, (result) => {
+		if (result.ok) setTodoList(todoList.filter((todo) => todo.id !== result.value));
 	});
 
 	const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,24 +42,19 @@ export const Home = () => {
 				<InputText
 					name="title"
 					value={title} onChange={(e) => {
-						todoController.checkTitleCreateTodo(e);
+						todoController.checkCreateTodoTitle(e);
 						setTitle(e);
 					}}
-					error={{
-						onFill: checkCreateTodoPresenterObservable.checkCreateTodoFailField,
-						onClear: checkCreateTodoPresenterObservable.checkCreateTodoSuccess
-					}}
+					error={checkCreateTodoPresenterObservable.checkCreateTodoField}
 				/>
+
 				<InputText
 					name="description"
 					value={description} onChange={(e) => {
-						todoController.checkDescriptionCreateTodo(e);
+						todoController.checkCreateTodoDescription(e);
 						setDescription(e);
 					}}
-					error={{
-						onFill: checkCreateTodoPresenterObservable.checkCreateTodoFailField,
-						onClear: checkCreateTodoPresenterObservable.checkCreateTodoSuccess
-					}}
+					error={checkCreateTodoPresenterObservable.checkCreateTodoField}
 				/>
 				<button>Adicionar</button>
 			</form>

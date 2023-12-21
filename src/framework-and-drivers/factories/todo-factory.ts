@@ -16,19 +16,17 @@ export function todoFactory() {
 	const todoValidationService = new TodoValidationService();
 
 	const checkCreateTodoPresenterObservable = {
-		checkCreateTodoSuccess: observableFactory(),
-		checkCreateTodoFailField: observableFactory()
+		checkCreateTodoField: observableFactory()
 	} satisfies ICheckCreateTodoViewModel;
 
 	const createTodoPresenterObservable = {
-		createTodoSuccess: observableFactory(),
-		createTodoFailField: observableFactory(),
-		createTodoFailMessage: observableFactory()
+		createTodo: observableFactory(),
+		createTodoField: observableFactory(),
+		createTodoMessage: observableFactory()
 	} satisfies ICreateTodoViewModel;
 
 	const removeTodoPresenterObservable = {
-		removeTodoSuccess: observableFactory(),
-		removeTodoFailMessage: observableFactory()
+		removeTodo: observableFactory(),
 	} satisfies IRemoveTodoViewModel;
 
 	const checkCreateTodoPresenter = new CheckCreateTodoPresenter(checkCreateTodoPresenterObservable);

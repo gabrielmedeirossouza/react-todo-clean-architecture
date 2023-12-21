@@ -1,3 +1,4 @@
+import { Result } from "@/shared/result";
 import { ICheckCreateTodoInputPort, ICheckCreateTodoOutputPort, ICheckDescriptionCreateTodoRequestModel, ICheckTitleCreateTodoRequestModel, ITodoValidationService } from "../interfaces/todo";
 
 export class CheckCreateTodoUseCase implements ICheckCreateTodoInputPort {
@@ -7,26 +8,20 @@ export class CheckCreateTodoUseCase implements ICheckCreateTodoInputPort {
 	) { }
 
 	public checkTitleCreateTodoRequest({ title }: ICheckTitleCreateTodoRequestModel): void {
-		const results = [
-			this._todoValidationService.validateTitleTooShort(title),
-			this._todoValidationService.validateTitleTooLong(title),
-		] as const;
+		const resultTooShort = this._todoValidationService.validateTitleTooShort(title);
+		const resultTooLong = this._todoValidationService.validateTitleTooLong(title);
+		if (!resultTooShort.ok) return this._todoOutputPort.checkCreateTodoTitleResponse({ response: resultTooShort });
+		if (!resultTooLong.ok) return this._todoOutputPort.checkCreateTodoTitleResponse({ response: resultTooLong });
 
-		const [titleTooShort, titleTooLong] = results;
-
-		this._todoOutputPort.checkCreateTodoTitleResponse({ response: titleTooShort });
-		this._todoOutputPort.checkCreateTodoTitleResponse({ response: titleTooLong });
+		this._todoOutputPort.checkCreateTodoTitleResponse({ response: Result.ok(undefined)});
 	}
 
 	public checkDescriptionCreateTodoRequest({ description }: ICheckDescriptionCreateTodoRequestModel): void {
-		const results = [
-			this._todoValidationService.validateDescriptionTooShort(description),
-			this._todoValidationService.validateDescriptionTooLong(description)
-		] as const;
+		const resultTooShort = this._todoValidationService.validateDescriptionTooShort(description);
+		const resultTooLong = this._todoValidationService.validateDescriptionTooLong(description);
+		if (!resultTooShort.ok) return this._todoOutputPort.checkCreateTodoDescriptionResponse({ response: resultTooShort });
+		if (!resultTooLong.ok) return this._todoOutputPort.checkCreateTodoDescriptionResponse({ response: resultTooLong });
 
-		const [descriptionTooShort, descriptionTooLong] = results;
-
-		this._todoOutputPort.checkCreateTodoDescriptionResponse({ response: descriptionTooShort });
-		this._todoOutputPort.checkCreateTodoDescriptionResponse({ response: descriptionTooLong });
+		this._todoOutputPort.checkCreateTodoDescriptionResponse({ response: Result.ok(undefined)});
 	}
 }

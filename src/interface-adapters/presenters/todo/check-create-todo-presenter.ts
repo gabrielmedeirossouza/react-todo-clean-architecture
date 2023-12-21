@@ -1,6 +1,7 @@
-import { PresentNameTooShortError, PresentNameTooLongErrorDTO, PresentUnknownMessageErrorDTO } from "@/interface-adapters/dtos";
+import { PresentNameTooLongErrorDTO, PresentNameTooShortErrorDTO, PresentUnknownMessageErrorDTO } from "@/interface-adapters/dtos";
+import { PresentFieldDTO } from "@/interface-adapters/dtos/present-field-dto";
 import { ICheckCreateTodoViewModel } from "@/interface-adapters/interfaces/todo";
-import { TodoDescriptionTooLongError, TodoDescriptionTooShortError, TodoTitleTooLongError, TodoTitleTooShortError } from "@/use-cases/errors/todo";
+import { Result } from "@/shared/result";
 import { ICheckCreateTodoOutputPort, ICheckDescriptionCreateTodoResponseModel, ICheckTitleCreateTodoResponseModel } from "@/use-cases/interfaces/todo";
 
 export class CheckCreateTodoPresenter implements ICheckCreateTodoOutputPort {
@@ -9,34 +10,34 @@ export class CheckCreateTodoPresenter implements ICheckCreateTodoOutputPort {
 	) {}
 
 	public checkCreateTodoTitleResponse({ response }: ICheckTitleCreateTodoResponseModel): void {
-		if (response.ok) return this._viewModel.checkCreateTodoSuccess?.notify({ field: "title" });
+		if (response.ok) return this._viewModel.checkCreateTodoField?.notify(Result.ok(new PresentFieldDTO("title")));
 
-		if (response.error instanceof TodoTitleTooShortError)
-			return this._viewModel.checkCreateTodoFailField?.notify(
-				new PresentNameTooShortError("title", response.error.value, `O Título precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
-			);
+		if (response.error.isNameTooShortErrorDTO())
+			return this._viewModel.checkCreateTodoField?.notify(Result.fail(
+				new PresentNameTooShortErrorDTO("title", response.error.value, `O título precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
+			));
 
-		if (response.error instanceof TodoTitleTooLongError)
-			return this._viewModel.checkCreateTodoFailField?.notify(
-				new PresentNameTooLongErrorDTO("title", response.error.value, `O Título precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
-			);
+		if (response.error.isNameTooLongErrorDTO())
+			return this._viewModel.checkCreateTodoField?.notify(Result.fail(
+				new PresentNameTooLongErrorDTO("title", response.error.value, `O título precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
+			));
 
-		this._viewModel.checkCreateTodoFailMessage?.notify(new PresentUnknownMessageErrorDTO());
+		this._viewModel.checkCreateTodoField?.notify(Result.fail(new PresentUnknownMessageErrorDTO()));
 	}
 
 	public checkCreateTodoDescriptionResponse({ response }: ICheckDescriptionCreateTodoResponseModel): void {
-		if (response.ok) return this._viewModel.checkCreateTodoSuccess?.notify({ field: "description" });
+		if (response.ok) return this._viewModel.checkCreateTodoField?.notify(Result.ok(new PresentFieldDTO("description")));
 
-		if (response.error instanceof TodoDescriptionTooShortError)
-			return this._viewModel.checkCreateTodoFailField?.notify(
-				new PresentNameTooShortError("description", response.error.value, `A Descrição precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
-			);
+		if (response.error.isNameTooShortErrorDTO())
+			return this._viewModel.checkCreateTodoField?.notify(Result.fail(
+				new PresentNameTooShortErrorDTO("description", response.error.value, `A descrição precisa ter pelo menos ${response.error.minLength} caracteres.`, response.error.minLength)
+			));
 
-		if (response.error instanceof TodoDescriptionTooLongError)
-			return this._viewModel.checkCreateTodoFailField?.notify(
-				new PresentNameTooLongErrorDTO("description", response.error.value, `A Descrição precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
-			);
+		if (response.error.isNameTooLongErrorDTO())
+			return this._viewModel.checkCreateTodoField?.notify(Result.fail(
+				new PresentNameTooLongErrorDTO("description", response.error.value, `A descrição precisa ter no máximo ${response.error.maxLength} caracteres.`, response.error.maxLength)
+			));
 
-		this._viewModel.checkCreateTodoFailMessage?.notify(new PresentUnknownMessageErrorDTO());
+		this._viewModel.checkCreateTodoField?.notify(Result.fail(new PresentUnknownMessageErrorDTO()));
 	}
 }

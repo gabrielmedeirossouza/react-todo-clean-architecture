@@ -1,6 +1,7 @@
 import { Result } from "@/shared/result";
 import { ICreateTodoRequestModel, ICreateTodoInputPort, ICreateTodoOutputPort, ITodoRepository, ITodoValidationService } from "../interfaces/todo";
 import { Todo } from "@/entities/todo";
+import { FieldDTO } from "../dtos/field-dto";
 
 export class CreateTodoUseCase implements ICreateTodoInputPort {
 	constructor(
@@ -10,28 +11,29 @@ export class CreateTodoUseCase implements ICreateTodoInputPort {
 	) { }
 
 	public async createTodoRequest({ title, description }: ICreateTodoRequestModel): Promise<void> {
-		const results = [
-			this._todoValidationService.validateTitleTooShort(title),
-			this._todoValidationService.validateTitleTooLong(title),
-			this._todoValidationService.validateDescriptionTooShort(description),
-			this._todoValidationService.validateDescriptionTooLong(description)
-		] as const;
+		const resultTitleTooShort = this._todoValidationService.validateTitleTooShort(title);
+		const resultTitleTooLong = this._todoValidationService.validateTitleTooLong(title);
+		const resultDescriptionTooShort = this._todoValidationService.validateDescriptionTooShort(description);
+		const resultDescriptionTooLong = this._todoValidationService.validateDescriptionTooLong(description);
 
-		const [titleTooShort, titleTooLong, descriptionTooShort, descriptionTooLong] = results;
+		if (!resultTitleTooShort.ok) this._todoOutputPort.createTodoTitleResponse({ response: resultTitleTooShort });
+		if (!resultTitleTooLong.ok) this._todoOutputPort.createTodoTitleResponse({ response: resultTitleTooLong });
+		if (!resultDescriptionTooShort.ok) this._todoOutputPort.createTodoDescriptionResponse({ response: resultDescriptionTooShort });
+		if (!resultDescriptionTooLong.ok) this._todoOutputPort.createTodoDescriptionResponse({ response: resultDescriptionTooLong });
 
-		this._todoOutputPort.createTodoTitleResponse({ response: titleTooShort });
-		this._todoOutputPort.createTodoTitleResponse({ response: titleTooLong });
-		this._todoOutputPort.createTodoDescriptionResponse({ response: descriptionTooShort });
-		this._todoOutputPort.createTodoDescriptionResponse({ response: descriptionTooLong });
+		const hasError =
+			!resultTitleTooShort.ok ||
+			!resultTitleTooLong.ok ||
+			!resultDescriptionTooShort.ok ||
+			!resultDescriptionTooLong.ok;
 
-		if (results.some(result => !result.ok)) return this._todoOutputPort.createTodoResponse({ response: Result.fail(undefined) });
+		if (hasError) return this._todoOutputPort.createTodoResponse({ response: Result.fail(undefined) });
+
+		this._todoOutputPort.createTodoTitleResponse({ response: Result.ok(new FieldDTO("title")) });
+		this._todoOutputPort.createTodoDescriptionResponse({ response: Result.ok(new FieldDTO("description")) });
 
 		const createdTodo = await this._todoRepository.create(title, description, false);
-		if (!createdTodo.ok) {
-			this._todoOutputPort.createTodoServiceResponse({ response: createdTodo });
-			this._todoOutputPort.createTodoResponse({ response: Result.fail(undefined) });
-			return;
-		}
+		if (!createdTodo.ok) return this._todoOutputPort.createTodoServiceResponse({ response: createdTodo });
 		this._todoOutputPort.createTodoServiceResponse({ response: Result.ok(undefined) });
 		const todo = new Todo(createdTodo.value, title, description, false);
 
