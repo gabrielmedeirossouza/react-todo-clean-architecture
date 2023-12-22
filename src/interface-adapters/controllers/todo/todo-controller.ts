@@ -1,21 +1,28 @@
 import { ITodoController } from "@/interface-adapters/interfaces/todo";
-import { ICheckCreateTodoInputPort, ICreateTodoInputPort, IRemoveTodoInputPort } from "@/use-cases/interfaces/todo";
+import { ICheckCreateTodoInputPort, ICreateTodoInputPort, IGetCreateTodoValidationRulesInputPort, IRemoveTodoInputPort } from "@/use-cases/interfaces/todo";
 
 interface ITodoControllerDependencies {
+	getCreateTodoValidationRulesUseCase: IGetCreateTodoValidationRulesInputPort;
 	checkCreateTodoUseCase: ICheckCreateTodoInputPort;
 	createTodoUseCase: ICreateTodoInputPort;
 	removeTodoUseCase: IRemoveTodoInputPort;
 }
 
 export class TodoController implements ITodoController {
+	private _getCreateTodoValidationRulesUseCase: IGetCreateTodoValidationRulesInputPort;
 	private _checkCreateTodoUseCase: ICheckCreateTodoInputPort;
 	private _createTodoUseCase: ICreateTodoInputPort;
 	private _removeTodoUseCase: IRemoveTodoInputPort;
 
-	constructor({ checkCreateTodoUseCase, createTodoUseCase, removeTodoUseCase }: ITodoControllerDependencies) {
+	constructor({ getCreateTodoValidationRulesUseCase, checkCreateTodoUseCase, createTodoUseCase, removeTodoUseCase }: ITodoControllerDependencies) {
+		this._getCreateTodoValidationRulesUseCase = getCreateTodoValidationRulesUseCase;
 		this._checkCreateTodoUseCase = checkCreateTodoUseCase;
 		this._createTodoUseCase = createTodoUseCase;
 		this._removeTodoUseCase = removeTodoUseCase;
+	}
+
+	public getCreateTodoValidationRules(): void {
+		this._getCreateTodoValidationRulesUseCase.getCreateTodoValidationRules();
 	}
 
 	public checkCreateTodoTitle(title: string): void {

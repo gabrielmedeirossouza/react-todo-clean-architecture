@@ -1,10 +1,10 @@
 import { TodoController } from "@/interface-adapters/controllers/todo";
-import { ICheckCreateTodoViewModel, ICreateTodoViewModel } from "@/interface-adapters/interfaces/todo";
+import { ICheckCreateTodoViewModel, ICreateTodoViewModel, IGetCreateTodoValidationRulesViewModel } from "@/interface-adapters/interfaces/todo";
 import { IRemoveTodoViewModel } from "@/interface-adapters/interfaces/todo/remove-todo-view-model";
-import { CreateTodoPresenter } from "@/interface-adapters/presenters/todo";
+import { CreateTodoPresenter, GetCreateTodoValidationRulesPresenter } from "@/interface-adapters/presenters/todo";
 import { RemoveTodoPresenter } from "@/interface-adapters/presenters/todo/remove-todo-presenter";
 import { InMemoryTodoRepository } from "@/interface-adapters/repositories/todo";
-import { CreateTodoUseCase } from "@/use-cases/todo-use-case";
+import { CreateTodoUseCase, GetCreateTodoValidationRulesUseCase } from "@/use-cases/todo-use-case";
 import { RemoveTodoUseCase } from "@/use-cases/todo-use-case/remove-todo-use-case";
 import { TodoValidationService } from "@/use-cases/todo-use-case/todo-validation-service";
 import { observableFactory } from "./observable-factory";
@@ -14,6 +14,10 @@ import { CheckCreateTodoUseCase } from "@/use-cases/todo-use-case/check-create-t
 export function todoFactory() {
 	const todoRepository = new InMemoryTodoRepository();
 	const todoValidationService = new TodoValidationService();
+
+	const getCreateTodoValidationRulesPresenterObservable = {
+		rules: observableFactory()
+	} satisfies IGetCreateTodoValidationRulesViewModel;
 
 	const checkCreateTodoPresenterObservable = {
 		checkCreateTodoField: observableFactory()
@@ -29,6 +33,12 @@ export function todoFactory() {
 		removeTodo: observableFactory(),
 	} satisfies IRemoveTodoViewModel;
 
+	const getCreateTodoValidationRulesPresenter = new GetCreateTodoValidationRulesPresenter(getCreateTodoValidationRulesPresenterObservable);
+	const getCreateTodoValidationRulesUseCase = new GetCreateTodoValidationRulesUseCase({
+		todoValidationService,
+		todoOutputPort: getCreateTodoValidationRulesPresenter
+	});
+
 	const checkCreateTodoPresenter = new CheckCreateTodoPresenter(checkCreateTodoPresenterObservable);
 	const checkCreateTodoUseCase = new CheckCreateTodoUseCase(todoValidationService, checkCreateTodoPresenter);
 
@@ -39,6 +49,7 @@ export function todoFactory() {
 	const removeTodoUseCase = new RemoveTodoUseCase(todoRepository, removeTodoPresenter);
 
 	const todoController = new TodoController({
+		getCreateTodoValidationRulesUseCase,
 		checkCreateTodoUseCase,
 		createTodoUseCase,
 		removeTodoUseCase
@@ -46,6 +57,7 @@ export function todoFactory() {
 
 	return {
 		todoController,
+		getCreateTodoValidationRulesPresenterObservable,
 		checkCreateTodoPresenterObservable,
 		createTodoPresenterObservable,
 		removeTodoPresenterObservable
