@@ -3,8 +3,7 @@ import { IObservable } from "@/interface-adapters/interfaces/observable";
 import { Result } from "@/shared/result";
 import { useState } from "react";
 import { useObserver } from "../../hooks";
-import { InputTextComponent } from "../../components/input-text-component";
-import { ErrorMessageComponent } from "../../components/error-message-component";
+import { InputTextComponent, TextLabelComponent, TextStatusErrorComponent } from "../../components";
 
 interface IInputTextPrefabProps {
 	name: string;
@@ -29,11 +28,10 @@ export function InputTextPrefab({ name, label, value, onChange, error }: IInputT
 
 	return (
 		<div>
-			<label>
-				{label}
+			<TextLabelComponent text={label || ""}>
 				<InputTextComponent value={value ?? ""} onChange={onChange ?? (() => undefined)} />
-			</label>
-			<ErrorMessageComponent message={errorMessage} />
+			</TextLabelComponent>
+			<TextStatusErrorComponent text={errorMessage} />
 		</div>
 	);
 }
