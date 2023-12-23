@@ -1,9 +1,9 @@
 import "./container-shape-component.scss";
 
-interface IContainerShapeProps {
+interface IContainerShapeComponentProps {
 	children: React.ReactNode;
 }
 
-export function ContainerShapeComponent({ children }: IContainerShapeProps) {
+export function ContainerShapeComponent({ children }: IContainerShapeComponentProps) {
 	return <div className="container-shape-component">{children}</div>;
 }

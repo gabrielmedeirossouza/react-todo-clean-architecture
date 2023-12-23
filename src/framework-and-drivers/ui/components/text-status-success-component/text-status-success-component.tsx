@@ -1,9 +1,9 @@
 import "./text-status-success-component.scss";
 
-interface ITextProps {
+interface ITextStatusSuccessComponentProps {
 	text: string;
 }
 
-export function TextStatusSuccessComponent({ text }: ITextProps) {
+export function TextStatusSuccessComponent({ text }: ITextStatusSuccessComponentProps) {
 	return <p className="text-status-success-component">{text}</p>;
 }

@@ -1,9 +1,9 @@
 import "./container-main-component.scss";
 
-interface IContainerMainProps {
+interface IContainerMainComponentProps {
 	children: React.ReactNode;
 }
 
-export function ContainerMainComponent({ children }: IContainerMainProps) {
+export function ContainerMainComponent({ children }: IContainerMainComponentProps) {
 	return <main className="container-main-component">{children}</main>;
 }

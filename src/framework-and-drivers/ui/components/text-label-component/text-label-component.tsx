@@ -1,11 +1,11 @@
 import "./text-label-component.scss";
 
-interface ITextProps {
+interface ITextLabelComponentProps {
 	text: string;
 	children: React.ReactNode;
 }
 
-export function TextLabelComponent({ text, children }: ITextProps) {
+export function TextLabelComponent({ text, children }: ITextLabelComponentProps) {
 	return (
 		<label className="text-label-component">
 			{text}
