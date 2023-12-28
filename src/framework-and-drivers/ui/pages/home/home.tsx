@@ -3,10 +3,6 @@ import { todoFactory } from "../../../factories/todo-factory";
 import { ITodo } from "@/entities/interfaces/todo";
 import { useFactory } from "../../hooks/use-factory";
 import { useObserver } from "../../hooks/use-observer";
-import { InputTextPrefab } from "../../prefabs/input-text-prefab";
-import "./home.scss";
-import { TextHeadingComponent } from "../../components/text-heading-component";
-import { ContainerMainComponent, ContainerShapeComponent } from "../../components";
 
 export const Home = () => {
 	const [todoList, setTodoList] = useState<ITodo[]>([]);
@@ -16,7 +12,6 @@ export const Home = () => {
 
 	const {
 		todoController,
-		checkCreateTodoPresenterObservable,
 		createTodoPresenterObservable,
 		removeTodoPresenterObservable
 	} = useFactory(() => todoFactory());
@@ -39,31 +34,24 @@ export const Home = () => {
 	};
 
 	return (
-		<ContainerMainComponent>
-			<TextHeadingComponent text="Home!" level="unique" />
+		<div>
 			<form onSubmit={handleAddTodo}>
-				<ContainerShapeComponent>
-					<InputTextPrefab
-						label="Título"
-						name="title"
-						value={title}
-						onChange={(e) => {
-							todoController.checkCreateTodoTitle(e);
-							setTitle(e);
-						}}
-						error={checkCreateTodoPresenterObservable.checkCreateTodoField}
-					/>
-				</ContainerShapeComponent>
+				<input
+					name="title"
+					value={title}
+					onChange={(e) => {
+						todoController.checkCreateTodoTitle(e.target.value);
+						setTitle(e.target.value);
+					}}
+				/>
 
-				<InputTextPrefab
-					label="Descrição"
+				<input
 					name="description"
 					value={description}
 					onChange={(e) => {
-						todoController.checkCreateTodoDescription(e);
-						setDescription(e);
+						todoController.checkCreateTodoDescription(e.target.value);
+						setDescription(e.target.value);
 					}}
-					error={checkCreateTodoPresenterObservable.checkCreateTodoField}
 				/>
 				<button>Adicionar</button>
 			</form>
@@ -79,6 +67,6 @@ export const Home = () => {
 			</ul>
 
 			{globalError && <p style={{ color: "tomato" }}>{globalError}</p>}
-		</ContainerMainComponent>
+		</div>
 	);
 };
